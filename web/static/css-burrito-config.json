@@ -1,0 +1,32 @@
+{
+  "settings": {
+    "root": {
+      "pathToSassDirectory": "./",
+      "sassDirectory": "stylesheets",
+      "sassImportFile": "application.scss"
+    },
+    "modules": {
+      "modulesDirectory": "modules",
+      "modulesImportFile": "_modules.scss",
+      "moduleFiles": [
+        "_example-module.scss"
+      ]
+    }
+  },
+  "template": {
+    "directories": [
+      "global",
+      "libs"
+    ],
+    "files": [
+      "global/_base.scss",
+      "global/_layout.scss",
+      "global/_settings.scss",
+      "global/_skin.scss",
+      "global/_typography.scss",
+      "global/_utilities.scss",
+      "libs/_library-variable-overrides.scss",
+      "libs/_normalize.scss"
+    ]
+  }
+}

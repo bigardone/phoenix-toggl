@@ -1,0 +1,43 @@
+#sessions_new_view, #registrations_new_view
+  min-height: 100vh
+  background: rgba(43,37,37,.95)
+  position: relative
+
+  > .form-wrapper
+    +transform(translate(-50%, -50%))
+    position: absolute
+    font-size: 1.1em
+    width: 20em
+    top: 50%
+    left: 50%
+    text-align: center
+
+    .inner
+      background: $light-gray
+      padding: $base-padding * 1.5
+      margin-bottom: $base-spacing * 1.5
+
+    header
+      margin-bottom: $base-spacing * 1.5
+
+    .logo
+      $size: 60px
+      width: $size
+      height: $size
+      border-radius: 50%
+      background-color: $red
+      margin: 0 auto
+
+    button, a
+      font-family: $heading-font-family
+      letter-spacing: .08em
+      text-transform: uppercase
+      font-size: .9em
+      margin-top: $base-spacing
+
+    button
+      width: 50%
+
+    a
+      display: inline-block
+      color: #fff
