@@ -5,6 +5,7 @@ defmodule PhoenixToggl.UserSocket do
 
   # Channels
   channel "users:*", PhoenixToggl.UserChannel
+  channel "workspaces:*", PhoenixToggl.WorkspaceChannel
 
   # Transports
   transport :websocket, Phoenix.Transports.WebSocket
