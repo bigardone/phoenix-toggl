@@ -4,7 +4,6 @@ defmodule PhoenixToggl.WorkspaceMonitor do
   - One containing which user is in which workspace.
   - Another containing workspaces and their channel pid.
   """
-
   use GenServer
 
   # Client interface
@@ -16,7 +15,7 @@ defmodule PhoenixToggl.WorkspaceMonitor do
   def start_link(workspace_id) do
     case GenServer.whereis(ref(workspace_id)) do
       nil ->
-        GenServer.start_link(__MODULE__, {[], %{}}, name: ref(workspace_id))
+        GenServer.start_link(__MODULE__, [], name: ref(workspace_id))
       _workspace ->
         {:error, :workspace_already_exists}
     end
@@ -45,14 +44,14 @@ defmodule PhoenixToggl.WorkspaceMonitor do
 
   # Server interface
 
-  def handle_call({:join, user_id}, _from, {users, timers}) do
-    users = [user_id | users]
+  def handle_call({:join, user_id}, _from, users) do
+    users = [user_id] ++ users
 
-    {:reply, :ok, {users, timers}}
+    {:reply, :ok, users}
   end
 
-  def handle_call(:members, _from, {users, _timers} = state) do
-    {:reply, users, state}
+  def handle_call(:members, _from, users) do
+    {:reply, users, users}
   end
 
   defp ref(workspace_id) do

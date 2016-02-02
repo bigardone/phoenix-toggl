@@ -1,6 +1,8 @@
 defmodule PhoenixToggl.Workspace do
   use PhoenixToggl.Web, :model
 
+  @derive {Poison.Encoder, only: [:id, :name]}
+
   schema "workspaces" do
     field :name, :string
     belongs_to :user, PhoenixToggl.User

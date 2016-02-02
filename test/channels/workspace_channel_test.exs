@@ -1,28 +1,33 @@
 defmodule PhoenixToggl.WorkspaceChannelTest do
   use PhoenixToggl.ChannelCase
 
-  alias PhoenixToggl.WorkspaceChannel
+  alias PhoenixToggl.{User, Workspace, UserSocket, WorkspaceMonitor}
 
   setup do
-    {:ok, _, socket} =
-      socket("current_user", %{id: 1})
-      |> subscribe_and_join(WorkspaceChannel, "workspaces:1")
+    user = %User{}
+      |> User.changeset(%{password: "12345678", email: "foo@bar.com", first_name: "John", last_name: "Doe"})
+      |> Repo.insert!
 
-    {:ok, socket: socket}
+    workspace = user
+      |> build_assoc(:workspaces)
+      |> Workspace.changeset(%{name: "Default"})
+      |> Repo.insert!
+
+    {:ok, jwt, _full_claims} = user |> Guardian.encode_and_sign(:token)
+
+    {:ok, socket} = connect(UserSocket, %{"token" => jwt})
+
+    {:ok, socket: socket, user: user, workspace: workspace}
   end
 
-  # test "ping replies with status ok", %{socket: socket} do
-  #   ref = push socket, "ping", %{"hello" => "there"}
-  #   assert_reply ref, :ok, %{"hello" => "there"}
-  # end
-  #
-  # test "shout broadcasts to workspaces:lobby", %{socket: socket} do
-  #   push socket, "shout", %{"hello" => "all"}
-  #   assert_broadcast "shout", %{"hello" => "all"}
-  # end
-  #
-  # test "broadcasts are pushed to the client", %{socket: socket} do
-  #   broadcast_from! socket, "broadcast", %{"some" => "data"}
-  #   assert_push "broadcast", %{"some" => "data"}
-  # end
+  test "fails to join invalid workspace", %{socket: socket} do
+    assert {:error, _} = join(socket, "workspaces:9999999")
+  end
+
+  test "after joining", %{socket: socket, user: user, workspace: workspace} do
+    {:ok, _, socket} = join(socket, "workspaces:#{workspace.id}")
+
+    assert socket.assigns[:workspace] == workspace
+    assert Enum.member?(WorkspaceMonitor.members(workspace.id), user.id)
+  end
 end

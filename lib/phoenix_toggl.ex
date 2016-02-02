@@ -13,7 +13,6 @@ defmodule PhoenixToggl do
       supervisor(PhoenixToggl.Repo, []),
       # Here you could define other workers and supervisors as children
       # worker(PhoenixToggl.Worker, [arg1, arg2, arg3]),
-      supervisor(PhoenixToggl.LobbyMonitor.Supervisor, []),
       supervisor(PhoenixToggl.WorkspaceMonitor.Supervisor, []),
     ]
 
