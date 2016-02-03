@@ -1,5 +1,5 @@
 defmodule PhoenixToggl.WorkspaceTest do
-  use PhoenixToggl.ModelCase
+  use PhoenixToggl.ModelCase, async: true
 
   alias PhoenixToggl.Workspace
 

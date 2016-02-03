@@ -26,6 +26,7 @@ defmodule PhoenixToggl.ConnCase do
       import Ecto.Query, only: [from: 1, from: 2]
 
       import PhoenixToggl.Router.Helpers
+      import PhoenixToggl.Factory
 
       # The default endpoint for testing
       @endpoint PhoenixToggl.Endpoint

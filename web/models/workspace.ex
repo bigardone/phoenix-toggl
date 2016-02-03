@@ -29,6 +29,7 @@ defmodule PhoenixToggl.Workspace do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> foreign_key_constraint(:user_id)
   end
 
   after_insert Workspace, :insert_workspace_user

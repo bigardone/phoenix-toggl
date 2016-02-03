@@ -1,5 +1,5 @@
 defmodule PhoenixToggl.UserTest do
-  use PhoenixToggl.ModelCase
+  use PhoenixToggl.ModelCase, async: true
 
   alias PhoenixToggl.User
 

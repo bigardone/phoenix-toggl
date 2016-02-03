@@ -1,5 +1,5 @@
 defmodule PhoenixToggl.PageControllerTest do
-  use PhoenixToggl.ConnCase
+  use PhoenixToggl.ConnCase, async: true
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

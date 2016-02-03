@@ -1,16 +1,12 @@
 defmodule PhoenixToggl.TimeEntryTest do
-  use PhoenixToggl.ModelCase
+  use PhoenixToggl.ModelCase, async: true
 
   alias PhoenixToggl.TimeEntry
   alias Timex.Date
 
   setup do
     user = create(:user)
-      |> with_workspace
-      |> Repo.preload(:workspaces)
-
-    workspace = List.last(user.workspaces)
-
+    workspace = create(:workspace, user_id: user.id)
     valid_attributes = %{
       name: "Default",
       workspace_id: workspace.id,
@@ -18,7 +14,11 @@ defmodule PhoenixToggl.TimeEntryTest do
       started_at: Date.now
     }
 
-    {:ok, valid_attributes: valid_attributes}
+    time_entry = %TimeEntry{}
+      |> TimeEntry.insert_changeset(valid_attributes)
+      |> Repo.insert!
+
+    {:ok, valid_attributes: valid_attributes, time_entry: time_entry}
   end
 
   test "changeset with valid attributes", %{valid_attributes: valid_attributes} do
@@ -31,9 +31,13 @@ defmodule PhoenixToggl.TimeEntryTest do
     refute changeset.valid?
   end
 
-  test "on insert it creates a new time_range", %{valid_attributes: valid_attributes} do
-    changeset = TimeEntry.changeset(%TimeEntry{}, valid_attributes)
+  test "on insert it creates a new time_range", %{time_entry: time_entry} do
+    assert length(time_entry.ranges) == 1
+  end
 
-    Repo.insert! changeset
+  test "stop", %{time_entry: time_entry} do
+    time_entry = TimeEntry.stop(time_entry)
+
+    refute time_entry.stopped_at == nil
   end
 end

@@ -24,7 +24,7 @@ defmodule PhoenixToggl.ChannelCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query, only: [from: 1, from: 2]
-
+      import PhoenixToggl.Factory
 
       # The default endpoint for testing
       @endpoint PhoenixToggl.Endpoint

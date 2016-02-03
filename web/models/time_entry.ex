@@ -1,8 +1,11 @@
 defmodule PhoenixToggl.TimeEntry do
   use PhoenixToggl.Web, :model
+  use Ecto.Model.Callbacks
 
-  alias PhoenixToggl.{TimeRange, Workspace, User}
+  alias __MODULE__
+  alias PhoenixToggl.{TimeRange, Workspace, User, Repo}
   alias Timex.Ecto.DateTime
+  alias Timex.Date
 
   schema "time_entries" do
     field :description, :string
@@ -30,5 +33,35 @@ defmodule PhoenixToggl.TimeEntry do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+    |> foreign_key_constraint(:workspace_id)
+    |> foreign_key_constraint(:user_id)
+  end
+
+  @doc """
+  Also sets the first time_range
+  """
+  def insert_changeset(model, params \\ :empty) do
+    model
+    |> changeset(params)
+    |> set_time_range
+  end
+
+  def stop(time_entry) do
+    now = Date.now
+
+    # TODO update last time_range
+
+    time_entry
+    |> TimeEntry.changeset(%{stopped_at: now})
+    |> Repo.update!
+  end
+
+  defp set_time_range(changeset) do
+    time_range = %TimeRange{start: changeset.changes.started_at}
+
+    changeset = changeset
+    |> Ecto.Changeset.put_embed(:ranges, [time_range])
+
+    changeset
   end
 end

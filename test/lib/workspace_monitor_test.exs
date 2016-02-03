@@ -1,5 +1,5 @@
 defmodule PhoenixToggl.WorkspaceMonitorTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias PhoenixToggl.WorkspaceMonitor
 
