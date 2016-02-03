@@ -5,10 +5,10 @@ defmodule PhoenixToggl.UserSocket do
 
   # Channels
   channel "users:*", PhoenixToggl.UserChannel
+  channel "workspaces:*", PhoenixToggl.WorkspaceChannel
 
   # Transports
   transport :websocket, Phoenix.Transports.WebSocket
-  transport :longpoll, Phoenix.Transports.LongPoll
 
   def connect(%{"token" => token}, socket) do
     case Guardian.decode_and_verify(token) do

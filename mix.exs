@@ -50,6 +50,8 @@ defmodule PhoenixToggl.Mixfile do
       {:comeonin, "~> 2.0"},
       {:guardian, "~> 0.9.0"},
       {:credo, "~> 0.2", only: [:dev, :test]},
+      {:timex, github: "bitwalker/timex"},
+      {:mix_test_watch, "~> 0.2", only: :dev},
     ]
   end
 
