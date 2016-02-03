@@ -1,7 +1,7 @@
 defmodule PhoenixToggl.TimeEntry do
   use PhoenixToggl.Web, :model
 
-  alias PhoenixToggl.{TimeRange, WorkspaceUser}
+  alias PhoenixToggl.{TimeRange, Workspace, User}
   alias Timex.Ecto.DateTime
 
   schema "time_entries" do
@@ -10,13 +10,15 @@ defmodule PhoenixToggl.TimeEntry do
     field :stopped_at, DateTime
     field :duration, :integer
 
-    belongs_to :workspace_user, WorkspaceUser
+    belongs_to :workspace, Workspace
+    belongs_to :user, User
+
     embeds_many :ranges, TimeRange
 
     timestamps
   end
 
-  @required_fields ~w(started_at workspace_user_id)
+  @required_fields ~w(started_at workspace_id user_id)
   @optional_fields ~w(description stopped_at duration)
 
   @doc """

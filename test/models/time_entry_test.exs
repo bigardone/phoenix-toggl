@@ -5,22 +5,20 @@ defmodule PhoenixToggl.TimeEntryTest do
   alias Timex.Date
 
   setup do
-    workspace_user = create(:user)
+    user = create(:user)
       |> with_workspace
       |> Repo.preload(:workspaces)
-      |> Map.get(:workspaces)
-      |> List.last
-      |> Repo.preload(:workspace_users)
-      |> Map.get(:workspace_users)
-      |> List.last
+
+    workspace = List.last(user.workspaces)
 
     valid_attributes = %{
       name: "Default",
-      workspace_user_id: workspace_user.id,
+      workspace_id: workspace.id,
+      user_id: user.id,
       started_at: Date.now
     }
 
-    {:ok, workspace_user: workspace_user, valid_attributes: valid_attributes}
+    {:ok, valid_attributes: valid_attributes}
   end
 
   test "changeset with valid attributes", %{valid_attributes: valid_attributes} do

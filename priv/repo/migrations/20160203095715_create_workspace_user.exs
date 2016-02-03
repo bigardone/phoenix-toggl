@@ -1,4 +1,4 @@
-defmodule PhoenixToggl.Repo.Migrations.CreateTimeEntry do
+defmodule PhoenixToggl.Repo.Migrations.CreateWorkspaceUser do
   use Ecto.Migration
 
   def change do

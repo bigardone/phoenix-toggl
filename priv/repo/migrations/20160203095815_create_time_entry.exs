@@ -9,11 +9,13 @@ defmodule PhoenixToggl.Repo.Migrations.CreateTimeEntry do
       add :duration, :integer, default: 0
       add :ranges, {:array, :map}, default: []
 
-      add :workspace_user_id, references(:workspace_users, on_delete: :delete_all), null: false
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :user_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps
     end
 
-    create index(:time_entries, [:workspace_user_id])
+    create index(:time_entries, [:workspace_id])
+    create index(:time_entries, [:user_id])
   end
 end
