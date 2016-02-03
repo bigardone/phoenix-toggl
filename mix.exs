@@ -26,7 +26,8 @@ defmodule PhoenixToggl.Mixfile do
        :gettext,
        :phoenix_ecto,
        :postgrex,
-       :comeonin
+       :comeonin,
+       :tzdata
      ]
    ]
   end
@@ -50,8 +51,10 @@ defmodule PhoenixToggl.Mixfile do
       {:comeonin, "~> 2.0"},
       {:guardian, "~> 0.9.0"},
       {:credo, "~> 0.2", only: [:dev, :test]},
-      {:timex, github: "bitwalker/timex"},
+      {:timex, "~> 1.0"},
+      {:timex_ecto, "~> 0.7.0"},
       {:mix_test_watch, "~> 0.2", only: :dev},
+      {:ex_machina, "~> 0.6.1", only: :test}
     ]
   end
 
