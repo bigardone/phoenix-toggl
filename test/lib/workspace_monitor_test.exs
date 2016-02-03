@@ -4,30 +4,49 @@ defmodule PhoenixToggl.WorkspaceMonitorTest do
   alias PhoenixToggl.WorkspaceMonitor
 
   setup do
-    :ok
+    workspace_id = :crypto.strong_rand_bytes(32) |> Base.encode64()
+    {:ok, pid} = WorkspaceMonitor.create(workspace_id)
+
+    {:ok, workspace_id: workspace_id, pid: pid}
   end
 
-  test "creating same workspace twice returns error" do
-    WorkspaceMonitor.create(1)
-    assert WorkspaceMonitor.create(1) == {:error, :workspace_already_exists}
+  test "creating same workspace twice returns error", %{workspace_id: workspace_id}  do
+    assert WorkspaceMonitor.create(workspace_id) == {:error, :workspace_already_exists}
   end
 
-  test "user joins a correct workspace" do
+  test "user joins a correct workspace", %{workspace_id: workspace_id}  do
     user_id = 1
 
-    WorkspaceMonitor.create(1)
-
-    assert WorkspaceMonitor.join(1, user_id) == :ok
-    assert Enum.member?(WorkspaceMonitor.members(1), user_id)
+    assert WorkspaceMonitor.join(workspace_id, user_id) == :ok
+    assert Enum.member?(WorkspaceMonitor.members(workspace_id), user_id)
   end
 
   test "user joins a incorrect workspace" do
     user_id = 1
 
-    assert WorkspaceMonitor.join(2, user_id) == {:error, :invalid_workspace}
+    assert WorkspaceMonitor.join(3333, user_id) == {:error, :invalid_workspace}
   end
 
-  test "all users" do
+  test "all members", %{workspace_id: workspace_id}  do
+    users = [1, 2, 3, 4, 5]
+    Enum.each(users, &WorkspaceMonitor.join(workspace_id, &1))
 
+    assert WorkspaceMonitor.members(workspace_id) == Enum.reverse(users)
+  end
+
+  test "user leaves the workspace", %{workspace_id: workspace_id} do
+    users = [1, 2, 3, 4, 5]
+    Enum.each(users, &WorkspaceMonitor.join(workspace_id, &1))
+
+    WorkspaceMonitor.leave(workspace_id, 1)
+
+    assert WorkspaceMonitor.members(workspace_id) == users |> List.delete(1) |> Enum.reverse
+  end
+
+  test "last user leaves", %{workspace_id: workspace_id} do
+    WorkspaceMonitor.join(workspace_id, 1)
+    WorkspaceMonitor.leave(workspace_id, 1)
+
+    assert WorkspaceMonitor.members(workspace_id) == {:error, :invalid_workspace}
   end
 end

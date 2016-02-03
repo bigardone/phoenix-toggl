@@ -30,4 +30,18 @@ defmodule PhoenixToggl.WorkspaceChannelTest do
     assert socket.assigns[:workspace] == workspace
     assert Enum.member?(WorkspaceMonitor.members(workspace.id), user.id)
   end
+
+  test "when leaving the channel", %{socket: socket, user: user, workspace: workspace} do
+    {:ok, _, socket} = join(socket, "workspaces:#{workspace.id}")
+    WorkspaceMonitor.join(workspace.id, 1234)
+
+    assert Enum.member?(WorkspaceMonitor.members(workspace.id), user.id)
+
+    Process.unlink(socket.channel_pid)
+    ref = leave(socket)
+
+    assert_reply ref, :ok
+
+    refute Enum.member?(WorkspaceMonitor.members(workspace.id), user.id)
+  end
 end

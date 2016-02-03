@@ -7,7 +7,7 @@ defmodule PhoenixToggl.WorkspaceMonitor.Supervisor do
 
   def init(:ok) do
     children = [
-      worker(PhoenixToggl.WorkspaceMonitor, [])
+      worker(PhoenixToggl.WorkspaceMonitor, [], restart: :temporary)
     ]
 
     supervise(children, strategy: :simple_one_for_one)

@@ -21,4 +21,13 @@ defmodule PhoenixToggl.WorkspaceChannel do
             {:ok, socket}
          end
   end
+
+  def terminate(_reason, socket) do
+    workspace_id = socket.assigns.workspace.id
+    user_id = socket.assigns.current_user.id
+
+    WorkspaceMonitor.leave(workspace_id, user_id)
+
+    :ok
+  end
 end
