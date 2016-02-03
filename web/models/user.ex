@@ -1,7 +1,7 @@
 defmodule PhoenixToggl.User do
   use PhoenixToggl.Web, :model
 
-  alias PhoenixToggl.Workspace
+  alias PhoenixToggl.{Workspace, WorkspaceUser}
 
   @derive {Poison.Encoder, only: [:id, :first_name, :last_name, :email]}
 
@@ -13,7 +13,9 @@ defmodule PhoenixToggl.User do
 
     field :password, :string, virtual: true
 
-    has_many :workspaces, Workspace
+    has_many :owned_workspaces, Workspace
+    has_many :workspace_users, WorkspaceUser
+    has_many :workspaces, through: [:workspace_users, :user]
 
     timestamps
   end

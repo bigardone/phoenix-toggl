@@ -1,11 +1,18 @@
 defmodule PhoenixToggl.Workspace do
   use PhoenixToggl.Web, :model
+  use Ecto.Model.Callbacks
+
+  alias __MODULE__
+  alias  PhoenixToggl.{User, WorkspaceUser, Repo}
 
   @derive {Poison.Encoder, only: [:id, :name]}
 
   schema "workspaces" do
     field :name, :string
-    belongs_to :user, PhoenixToggl.User
+
+    belongs_to :owner, User, foreign_key: :user_id
+    has_many :workspace_users, WorkspaceUser
+    has_many :users, through: [:workspace_users, :user]
 
     timestamps
   end
@@ -22,5 +29,17 @@ defmodule PhoenixToggl.Workspace do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
+  end
+
+  after_insert Workspace, :insert_workspace_user
+
+  def insert_workspace_user(changeset) do
+    workspace_id = changeset.model.id
+    user_id = changeset.model.user_id
+    workspace_user_changeset = WorkspaceUser.changeset(%WorkspaceUser{}, %{workspace_id: workspace_id, user_id: user_id})
+
+    Repo.insert!(workspace_user_changeset)
+
+    changeset
   end
 end

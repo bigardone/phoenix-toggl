@@ -9,7 +9,7 @@ defmodule PhoenixToggl.WorkspaceChannelTest do
       |> Repo.insert!
 
     workspace = user
-      |> build_assoc(:workspaces)
+      |> build_assoc(:owned_workspaces)
       |> Workspace.changeset(%{name: "Default"})
       |> Repo.insert!
 

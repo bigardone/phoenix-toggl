@@ -19,9 +19,12 @@ defmodule PhoenixToggl.ModelCase do
       alias PhoenixToggl.Repo
 
       import Ecto
+      import Ecto.Model, except: [build: 2]
       import Ecto.Changeset
       import Ecto.Query, only: [from: 1, from: 2]
       import PhoenixToggl.ModelCase
+
+      import PhoenixToggl.Factory
     end
   end
 

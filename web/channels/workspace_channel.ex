@@ -7,8 +7,8 @@ defmodule PhoenixToggl.WorkspaceChannel do
     current_user = socket.assigns.current_user
 
     current_user
-      |> Repo.preload(:workspaces)
-      |> assoc(:workspaces)
+      |> Repo.preload(:owned_workspaces)
+      |> assoc(:owned_workspaces)
       |> Repo.get(workspace_id)
       |> case do
           nil ->
