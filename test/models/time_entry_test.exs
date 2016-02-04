@@ -36,8 +36,14 @@ defmodule PhoenixToggl.TimeEntryTest do
   end
 
   test "stop", %{time_entry: time_entry} do
-    time_entry = TimeEntry.stop(time_entry)
+    time_entry = time_entry
+      |> TimeEntry.stop
+      |> Repo.update!
 
     refute time_entry.stopped_at == nil
+
+    time_range = List.last(time_entry.ranges)
+
+    assert time_range.stop == time_entry.stopped_at
   end
 end

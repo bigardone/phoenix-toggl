@@ -3,7 +3,7 @@ defmodule PhoenixToggl.TimeEntry do
   use Ecto.Model.Callbacks
 
   alias __MODULE__
-  alias PhoenixToggl.{TimeRange, Workspace, User, Repo}
+  alias PhoenixToggl.{TimeRange, Workspace, User}
   alias Timex.Ecto.DateTime
   alias Timex.Date
 
@@ -46,22 +46,42 @@ defmodule PhoenixToggl.TimeEntry do
     |> set_time_range
   end
 
+  def stop_changeset(model, params \\ :empty) do
+    model
+    |> changeset(params)
+    |> update_last_time_range
+  end
+
   def stop(time_entry) do
     now = Date.now
 
-    # TODO update last time_range
-
     time_entry
-    |> TimeEntry.changeset(%{stopped_at: now})
-    |> Repo.update!
+    |> TimeEntry.stop_changeset(%{stopped_at: now})
   end
 
-  defp set_time_range(changeset) do
-    time_range = %TimeRange{start: changeset.changes.started_at}
+  defp set_time_range(current_changeset) do
+    time_range = %TimeRange{start: current_changeset.changes.started_at}
 
-    changeset = changeset
+    current_changeset = current_changeset
     |> Ecto.Changeset.put_embed(:ranges, [time_range])
 
-    changeset
+    current_changeset
+  end
+
+  defp update_last_time_range(current_changeset) do
+    case current_changeset do
+      %Ecto.Changeset{valid?: true, changes: %{stopped_at: stopped_at}, model: %{ranges: ranges}} ->
+        index = length(ranges) - 1
+
+        time_range = ranges
+          |> List.last
+          |> Map.put(:stop, stopped_at)
+
+        ranges = List.replace_at(ranges, index, time_range)
+
+        Ecto.Changeset.put_embed(current_changeset, :ranges, ranges)
+      _ ->
+        current_changeset
+    end
   end
 end
