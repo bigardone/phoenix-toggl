@@ -45,5 +45,20 @@ defmodule PhoenixToggl.TimeEntryTest do
     time_range = List.last(time_entry.ranges)
 
     assert time_range.stop == time_entry.stopped_at
+    assert time_range.duration == Date.diff(time_range.start, time_range.stop, :secs)
   end
+
+  test "restart with no restart_at", %{time_entry: time_entry} do
+    changeset = TimeEntry.restart_changeset(time_entry, %{})
+
+    refute changeset.valid?
+    assert {:restarted_at, "can't be blank"} in changeset.errors
+  end
+
+  # test "restart when there is a current time_period started", %{time_entry: time_entry} do
+  #   changeset = TimeEntry.restart(time_entry)
+  #
+  #   refute changeset.valid?
+  #   assert {:ranges, "time range already started"} in changeset.errors
+  # end
 end
