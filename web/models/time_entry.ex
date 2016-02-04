@@ -42,7 +42,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Creates a default changeset and sets the first time_range
   """
-  def insert_changeset(model, params \\ :empty) do
+  def start_changeset(model, params \\ :empty) do
     model
     |> changeset(params)
     |> put_change(:duration, 0)
@@ -65,8 +65,18 @@ defmodule PhoenixToggl.TimeEntry do
   """
   def restart_changeset(model, params \\ :empty) do
     model
+    |> changeset(params)
     |> cast(params, @restart_required_fields, @optional_fields)
+    |> validate_previous_started_range
     |> start_new_time_range
+  end
+
+  @doc """
+  Returns a start_changeset
+  """
+  def start(time_entry, params) do
+    time_entry
+    |> start_changeset(params)
   end
 
   @doc """
@@ -114,13 +124,21 @@ defmodule PhoenixToggl.TimeEntry do
 
   defp start_new_time_range(current_changeset) do
     case current_changeset do
-      %Ecto.Changeset{valid?: true} ->
-        time_ranges = current_changeset.model.ranges ++ %TimeRange{start: current_changeset.changes.restarted_at}
+      %Ecto.Changeset{valid?: true, changes: %{restarted_at: restarted_at}} ->
+        time_ranges = current_changeset.model.ranges ++ [%TimeRange{start: restarted_at}]
 
         current_changeset
         |> put_embed(:ranges, time_ranges)
       _ ->
         current_changeset
+    end
+  end
+
+  def validate_previous_started_range(current_changeset) do
+    range = List.last(current_changeset.model.ranges)
+
+    validate_change current_changeset, :restarted_at, fn :restarted_at, _value ->
+      if range.stop == nil, do: [{:restarted_at, "time range already started"}], else: []
     end
   end
 end
