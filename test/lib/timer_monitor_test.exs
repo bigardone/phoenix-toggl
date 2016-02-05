@@ -27,4 +27,9 @@ defmodule PhoenixToggl.TimerMonitorTest do
     TimerMonitor.start(user_id, time_entry_id, started_at)
     assert TimerMonitor.start(user_id, time_entry_id, started_at) == :timer_already_started
   end
+
+  test "stopping a timer", %{user_id: user_id} do
+    assert TimerMonitor.stop(user_id) == :ok
+    assert TimerMonitor.start(user_id, 1, Date.now) == {:error, :invalid_timer}
+  end
 end

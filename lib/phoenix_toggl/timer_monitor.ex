@@ -27,6 +27,14 @@ defmodule PhoenixToggl.TimerMonitor do
     try_call(user_id, {:start, time_entry_id, started_at})
   end
 
+  def stop(user_id) do
+    try_call(user_id, :stop)
+  end
+
+  def info(user_id) do
+    try_call(user_id, :info)
+  end
+
   def handle_call({:start, _id, _started_at}, _from, %{time_entry_id: time_entry_id} = state) when time_entry_id != nil, do: {:reply, :timer_already_started, state}
   def handle_call({:start, id, started_at}, _from, _state) do
     new_state = %{
@@ -35,6 +43,14 @@ defmodule PhoenixToggl.TimerMonitor do
     }
 
     {:reply, new_state, new_state}
+  end
+
+  def handle_call(:stop, _from, state) do
+    {:stop, :normal, :ok, state}
+  end
+
+  def handle_call(:info, _from, state) do
+    {:reply, state, state}
   end
 
   defp try_call(user_id, call_function) do
