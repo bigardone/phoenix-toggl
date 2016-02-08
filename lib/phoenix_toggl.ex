@@ -14,6 +14,7 @@ defmodule PhoenixToggl do
       # Here you could define other workers and supervisors as children
       # worker(PhoenixToggl.Worker, [arg1, arg2, arg3]),
       supervisor(PhoenixToggl.WorkspaceMonitor.Supervisor, []),
+      supervisor(PhoenixToggl.TimerMonitor.Supervisor, []),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

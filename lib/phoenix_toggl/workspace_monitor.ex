@@ -1,8 +1,7 @@
 defmodule PhoenixToggl.WorkspaceMonitor do
   @moduledoc """
-  Stores two maps:
-  - One containing which user is in which workspace.
-  - Another containing workspaces and their channel pid.
+  Stores a list of the connected users ids in a
+  given workspace.
   """
   use GenServer
 
@@ -62,7 +61,7 @@ defmodule PhoenixToggl.WorkspaceMonitor do
     users = List.delete(users, user_id)
 
     case length(users) do
-      0 -> {:stop, :normal, :ok, users} 
+      0 -> {:stop, :normal, :ok, users}
       _ -> {:reply, users, users}
     end
   end
