@@ -1,0 +1,44 @@
+#main_header
+  background: #333
+  margin-bottom: $base-spacing
+
+  nav
+    display: inline-block
+    float: left
+
+  .logo-link
+    font-size: 1.3em
+    font-weight: bold
+    margin-right: $base-spacing
+
+  .logo
+    $size: 26px
+    width: $size
+    height: $size
+    border-radius: 50%
+    background-color: $red
+    display: inline-block
+    vertical-align: middle
+
+  a
+    color: $light-gray
+
+    &:hover
+      color: #fff
+
+    &.active
+      background: $light-gray
+      color: #333
+
+  .right
+    float: right
+
+  ul
+    display: inline-block
+    li
+      display: inline-block
+      a
+        line-height: 3.5em
+        display: inline-block
+        padding: 0 2em
+        font-size: .85em

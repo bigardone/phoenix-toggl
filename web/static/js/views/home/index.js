@@ -4,6 +4,8 @@ import classnames           from 'classnames';
 
 import { setDocumentTitle } from '../../utils';
 
+import Timer                from '../../components/timer';
+
 class HomeIndexView extends React.Component {
   componentDidMount() {
     setDocumentTitle('Home');
@@ -11,8 +13,10 @@ class HomeIndexView extends React.Component {
 
   render() {
     return (
-      <div className="view-container home index">
-        Hello, world!
+      <div id="home_index" className="view-container">
+        <div className="container">
+          <Timer />
+        </div>
       </div>
     );
   }

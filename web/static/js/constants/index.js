@@ -5,6 +5,10 @@ const Constants = {
   SESSIONS_ERROR: 'SESSIONS_ERROR',
   REGISTRATIONS_ERROR: 'REGISTRATIONS_ERROR',
   SOCKET_CONNECTED: 'SOCKET_CONNECTED',
+
+  // Timer action types
+  TIMER_START: 'TIMER_START',
+  TIMER_STOP: 'TIMER_STOP',
 };
 
 export default Constants;
