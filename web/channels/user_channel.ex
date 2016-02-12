@@ -1,7 +1,7 @@
 defmodule PhoenixToggl.UserChannel do
   use PhoenixToggl.Web, :channel
 
-  alias PhoenixToggl.{TimerMonitor, TimeEntry}
+  alias PhoenixToggl.{TimerMonitor, TimeEntry, TimeEntryActions}
 
   def join("users:" <> user_id, _params, socket) do
     user_id = String.to_integer(user_id)
@@ -30,14 +30,15 @@ defmodule PhoenixToggl.UserChannel do
       started_at: started_at
     }
 
-    time_entry = %TimeEntry{}
-      |> TimeEntry.start(attributes)
-      |> Repo.insert!
+    case TimeEntryActions.start(attributes) do
+      {:error, :active_time_entry_params_exists} ->
+        {:reply, :error, socket}
+      time_entry ->
+        TimerMonitor.create(current_user.id)
+        TimerMonitor.start(current_user.id, time_entry.id, time_entry.started_at)
 
-    TimerMonitor.create(current_user.id)
-    TimerMonitor.start(current_user.id, time_entry.id, time_entry.started_at)
-
-    {:reply, {:ok, time_entry}, socket}
+        {:reply, {:ok, time_entry}, socket}
+    end
   end
 
   def handle_in("time_entry:stop",
