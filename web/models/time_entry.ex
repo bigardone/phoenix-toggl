@@ -95,6 +95,11 @@ defmodule PhoenixToggl.TimeEntry do
     |> restart_changeset(%{restarted_at: date_time})
   end
 
+  def active_for_user(query, user_id) do
+    from t in query,
+      where: t.user_id == ^user_id and is_nil(t.stopped_at)
+  end
+
   # Private functions
   ###################
 
