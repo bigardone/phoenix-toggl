@@ -27,13 +27,6 @@ export function setCurrentUser(dispatch, user) {
         });
     });
   }
-
-  channel.on('projects:add', (msg) => {
-    dispatch({
-        type: Constants.BOARDS_ADDED,
-        board: msg.board,
-      });
-  });
 };
 
 const Actions = {
@@ -69,10 +62,10 @@ const Actions = {
       const authToken = localStorage.getItem('phoenixAuthToken');
 
       httpGet('/api/v1/current_user')
-      .then(function(data) {
+      .then(function (data) {
         setCurrentUser(dispatch, data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
         dispatch(routeActions.push('/sign_in'));
       });
@@ -92,7 +85,7 @@ const Actions = {
 
         dispatch(routeActions.push('/sign_in'));
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
     };
