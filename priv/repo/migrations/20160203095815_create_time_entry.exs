@@ -7,9 +7,8 @@ defmodule PhoenixToggl.Repo.Migrations.CreateTimeEntry do
       add :started_at, :datetime, null: false
       add :stopped_at, :datetime
       add :duration, :integer, default: 0
-      add :ranges, {:array, :map}, default: []
 
-      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: true
       add :user_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps

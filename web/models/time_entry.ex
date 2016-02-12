@@ -2,9 +2,11 @@ defmodule PhoenixToggl.TimeEntry do
   use PhoenixToggl.Web, :model
   use Ecto.Model.Callbacks
 
-  alias PhoenixToggl.{TimeRange, Workspace, User}
+  alias PhoenixToggl.{Workspace, User}
   alias Timex.Ecto.DateTime
   alias Timex.Date
+
+  @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :duration]}
 
   schema "time_entries" do
     field :description, :string
@@ -17,13 +19,11 @@ defmodule PhoenixToggl.TimeEntry do
     belongs_to :workspace, Workspace
     belongs_to :user, User
 
-    embeds_many :ranges, TimeRange
-
     timestamps
   end
 
-  @required_fields ~w(started_at workspace_id user_id)
-  @optional_fields ~w(description stopped_at duration)
+  @required_fields ~w(started_at user_id)
+  @optional_fields ~w(description stopped_at duration workspace_id)
   @restart_required_fields ~w(restarted_at)
 
   @doc """
@@ -46,7 +46,6 @@ defmodule PhoenixToggl.TimeEntry do
     model
     |> changeset(params)
     |> put_change(:duration, 0)
-    |> set_time_range
   end
 
   @doc """
@@ -54,9 +53,11 @@ defmodule PhoenixToggl.TimeEntry do
   on the last time_range
   """
   def stop_changeset(model, params \\ :empty) do
+    duration = Date.diff(model.started_at, params.stopped_at, :secs)
+
     model
     |> changeset(params)
-    |> update_last_time_range
+    |> put_change(:duration, duration)
   end
 
   @doc """
@@ -67,8 +68,7 @@ defmodule PhoenixToggl.TimeEntry do
     model
     |> changeset(params)
     |> cast(params, @restart_required_fields, @optional_fields)
-    |> validate_previous_started_range
-    |> start_new_time_range
+    |> put_change(:stopped_at, nil)
   end
 
   @doc """
@@ -88,7 +88,7 @@ defmodule PhoenixToggl.TimeEntry do
   end
 
   @doc """
-
+  Returns a restart_changeset
   """
   def restart(time_entry, date_time \\ Date.now) do
     time_entry
@@ -98,47 +98,4 @@ defmodule PhoenixToggl.TimeEntry do
   # Private functions
   ###################
 
-  defp set_time_range(current_changeset) do
-    time_range = %TimeRange{start: current_changeset.changes.started_at}
-    put_embed(current_changeset, :ranges, [time_range])
-  end
-
-  defp update_last_time_range(current_changeset) do
-    case current_changeset do
-      %Ecto.Changeset{valid?: true, changes: %{stopped_at: stopped_at}, model: %{ranges: ranges, duration: total_duration}} ->
-        index = length(ranges) - 1
-        time_range = List.last(ranges)
-        duration = Date.diff(time_range.start, stopped_at, :secs)
-
-        time_range = %{time_range | stop: stopped_at, duration: duration}
-
-        ranges = List.replace_at(ranges, index, time_range)
-
-        current_changeset
-        |> put_change(:duration, total_duration + duration)
-        |> put_embed(:ranges, ranges)
-      _ ->
-        current_changeset
-    end
-  end
-
-  defp start_new_time_range(current_changeset) do
-    case current_changeset do
-      %Ecto.Changeset{valid?: true, changes: %{restarted_at: restarted_at}} ->
-        time_ranges = current_changeset.model.ranges ++ [%TimeRange{start: restarted_at}]
-
-        current_changeset
-        |> put_embed(:ranges, time_ranges)
-      _ ->
-        current_changeset
-    end
-  end
-
-  def validate_previous_started_range(current_changeset) do
-    range = List.last(current_changeset.model.ranges)
-
-    validate_change current_changeset, :restarted_at, fn :restarted_at, _value ->
-      if range.stop == nil, do: [{:restarted_at, "time range already started"}], else: []
-    end
-  end
 end
