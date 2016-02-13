@@ -61,6 +61,8 @@ class Timer extends React.Component {
     const { dispatch, started } = this.props;
     const { time, description, duration } = this.refs;
 
+    description.value = timeEntry.description;
+
     const { year, month, day, hour, minute, second } = timeEntry.started_at;
     const timeEntryStart = moment.utc(`${year}-${month}-${day} ${hour}:${minute}:${second}`, 'YYYY-M-D H:m:s');
     const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
