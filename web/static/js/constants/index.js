@@ -9,6 +9,7 @@ const Constants = {
   // Timer action types
   TIMER_START: 'TIMER_START',
   TIMER_STOP: 'TIMER_STOP',
+  TIMER_SET_TIME_ENTRY: 'TIMER_SET_TIME_ENTRY',
 };
 
 export default Constants;
