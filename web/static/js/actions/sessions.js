@@ -19,12 +19,17 @@ export function setCurrentUser(dispatch, user) {
   const channel = socket.channel(`users:${user.id}`);
 
   if (channel.state != 'joined') {
-    channel.join().receive('ok', () => {
+    channel.join().receive('ok', (payload) => {
       dispatch({
-          type: Constants.SOCKET_CONNECTED,
-          socket: socket,
-          channel: channel,
-        });
+        type: Constants.SOCKET_CONNECTED,
+        socket: socket,
+        channel: channel,
+      });
+
+      dispatch({
+        type: Constants.TIMER_SET_TIME_ENTRY,
+        timeEntry: payload.time_entry,
+      });
     });
   }
 };
@@ -46,6 +51,8 @@ const Actions = {
         dispatch(routeActions.push('/'));
       })
       .catch((error) => {
+        console.log(error);
+
         error.response.json()
         .then((errorJSON) => {
           dispatch({
