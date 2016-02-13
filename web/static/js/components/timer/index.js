@@ -7,7 +7,15 @@ import Actions            from '../../actions/timer';
 
 class Timer extends React.Component {
   componentDidMount() {
-    const { dispatch, channel } = this.props;
+    const { timeEntry } = this.props;
+
+    if (timeEntry != null) this._startTimer(timeEntry);
+  }
+
+  componentDidUpdate() {
+    const { timeEntry, started } = this.props;
+
+    if (timeEntry != null && !started) this._startTimer(timeEntry);
   }
 
   _handleButtonClick() {
@@ -15,37 +23,26 @@ class Timer extends React.Component {
   }
 
   _start() {
-    const startedAt = moment();
+    const startedAt = moment.utc().toISOString();
     const { time, description } = this.refs;
     const { start, dispatch, duration, channel } = this.props;
 
     const timeEntry = {
-      started_at: startedAt.toISOString(),
+      started_at: startedAt,
       description: description.value.trim(),
       workspace_id: null,
     };
 
     channel.push('time_entry:start', timeEntry)
     .receive('ok', (data) => {
-      const timer = new Tock({
-        start: '00:00:00',
-        callback: () => {
-          const currentTime = moment.duration(timer.lap());
-          time.value = `${this._timeValue(currentTime.hours())}:${this._timeValue(currentTime.minutes())}:${this._timeValue(currentTime.seconds())}`;
-        },
-      });
-
-      timer.start(duration);
-
-      console.log(data);
-
-      dispatch(Actions.start(timer, data));
+      this._startTimer(data, 0);
     });
   }
 
   _stop() {
     const stoppedAt = moment().toISOString();
     const { timer, dispatch, timeEntry, channel } = this.props;
+    const { time, description } = this.refs;
 
     timeEntry.stopped_at = stoppedAt;
 
@@ -54,8 +51,31 @@ class Timer extends React.Component {
       timer.stop();
 
       dispatch(Actions.stop(timer));
+      time.value = '0 sec';
+      description.value = '';
     });
 
+  }
+
+  _startTimer(timeEntry) {
+    const { dispatch, started } = this.props;
+    const { time, description, duration } = this.refs;
+
+    const { year, month, day, hour, minute, second } = timeEntry.started_at;
+    const timeEntryStart = moment.utc(`${year}-${month}-${day} ${hour}:${minute}:${second}`, 'YYYY-M-D H:m:s');
+    const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
+
+    const timer = new Tock({
+      start: '00:00:00',
+      callback: () => {
+        const currentTime = moment.duration(timer.lap());
+        time.value = `${this._timeValue(currentTime.hours())}:${this._timeValue(currentTime.minutes())}:${this._timeValue(currentTime.seconds())}`;
+      },
+    });
+
+    timer.start(initialTime);
+
+    dispatch(Actions.start(timer, timeEntry));
   }
 
   _timeValue(value) {
