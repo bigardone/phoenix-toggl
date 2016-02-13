@@ -1,0 +1,39 @@
+#home_index
+  .timer-wrapper
+    +display(flex)
+    background-color: #fff
+    position: relative
+    box-shadow: 0 1px 4px rgba(128,128,128,.4)
+    font-size: 1.2em
+
+    > div
+      +display(flex)
+      +flex(0 0 auto)
+
+    .description-container
+      +box-flex(1)
+      +flex(1 1 auto)
+
+    .date-time-container
+      padding: 0 $base-spacing
+      input
+        width: 7em
+
+    .button-container
+      width: 20%
+      max-width: 192px
+
+      button
+        +fill-parent
+        color: #fff
+
+        &.started
+          background: $green
+
+          &:hover
+            background: $dark-green
+
+    [type=text]
+      margin: 0
+      box-shadow: 0 0 0
+      border: 0px none

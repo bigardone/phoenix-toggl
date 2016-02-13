@@ -32,6 +32,7 @@
     "redux-logger": "^2.4.0",
     "redux-thunk": "^1.0.3",
     "sass-brunch": "^2.0.0",
+    "tocktimer": "^1.0.7",
     "uglify-js-brunch": "~1.7.0"
   }
 }

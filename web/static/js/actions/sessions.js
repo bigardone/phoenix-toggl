@@ -19,21 +19,19 @@ export function setCurrentUser(dispatch, user) {
   const channel = socket.channel(`users:${user.id}`);
 
   if (channel.state != 'joined') {
-    channel.join().receive('ok', () => {
+    channel.join().receive('ok', (payload) => {
       dispatch({
-          type: Constants.SOCKET_CONNECTED,
-          socket: socket,
-          channel: channel,
-        });
+        type: Constants.SOCKET_CONNECTED,
+        socket: socket,
+        channel: channel,
+      });
+
+      dispatch({
+        type: Constants.TIMER_SET_TIME_ENTRY,
+        timeEntry: payload.time_entry,
+      });
     });
   }
-
-  channel.on('projects:add', (msg) => {
-    dispatch({
-        type: Constants.BOARDS_ADDED,
-        board: msg.board,
-      });
-  });
 };
 
 const Actions = {
@@ -53,6 +51,8 @@ const Actions = {
         dispatch(routeActions.push('/'));
       })
       .catch((error) => {
+        console.log(error);
+
         error.response.json()
         .then((errorJSON) => {
           dispatch({
@@ -69,10 +69,10 @@ const Actions = {
       const authToken = localStorage.getItem('phoenixAuthToken');
 
       httpGet('/api/v1/current_user')
-      .then(function(data) {
+      .then(function (data) {
         setCurrentUser(dispatch, data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
         dispatch(routeActions.push('/sign_in'));
       });
@@ -92,7 +92,7 @@ const Actions = {
 
         dispatch(routeActions.push('/sign_in'));
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
     };

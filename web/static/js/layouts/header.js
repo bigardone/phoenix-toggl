@@ -1,7 +1,6 @@
 import React            from 'react';
 import { connect }      from 'react-redux';
 import { Link }         from 'react-router';
-import ReactGravatar    from 'react-gravatar';
 import PageClick        from 'react-page-click';
 import { routeActions } from 'react-router-redux';
 
@@ -20,7 +19,7 @@ class Header extends React.Component {
 
     return (
       <a className="current-user">
-        <ReactGravatar className="react-gravatar" email={currentUser.email} https /> {fullName}
+        {fullName}
       </a>
     );
   }
@@ -45,20 +44,29 @@ class Header extends React.Component {
 
   render() {
     return (
-      <header className="main-header">
-        <Link to='/'>
-          <span className='logo'/>
-        </Link>
-        <nav className="right">
-          <ul>
-            <li>
-              {this._renderCurrentUser()}
-            </li>
-            <li>
-              {this._renderSignOutLink()}
-            </li>
-          </ul>
-        </nav>
+      <header id="main_header">
+        <div className="container">
+          <nav>
+            <Link className="logo-link" to='/'>
+              <span className="logo"/> phoenix toggl
+            </Link>
+            <ul>
+              <li>
+                <Link to="/" activeClassName="active">Timer</Link>
+              </li>
+            </ul>
+          </nav>
+          <nav className="right">
+            <ul>
+              <li>
+                {this._renderCurrentUser()}
+              </li>
+              <li>
+                {this._renderSignOutLink()}
+              </li>
+            </ul>
+          </nav>
+        </div>
       </header>
     );
   }
