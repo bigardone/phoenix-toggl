@@ -1,10 +1,11 @@
-import React, {PropTypes}   from 'react';
-import Tock                 from 'tocktimer';
-import moment               from 'moment';
-import { connect }          from 'react-redux';
-import classnames           from 'classnames';
-import Actions              from '../../actions/timer';
-import { appendTimeEntry }  from '../../actions/time_entries';
+import React, {PropTypes}         from 'react';
+import Tock                       from 'tocktimer';
+import moment                     from 'moment';
+import { connect }                from 'react-redux';
+import classnames                 from 'classnames';
+import Actions                    from '../../actions/timer';
+import { appendTimeEntry }        from '../../actions/time_entries';
+import { timexDateTimeToString }  from '../../utils';
 
 class Timer extends React.Component {
   componentDidMount() {
@@ -66,8 +67,7 @@ class Timer extends React.Component {
 
     description.value = timeEntry.description;
 
-    const { year, month, day, hour, minute, second } = timeEntry.started_at;
-    const timeEntryStart = moment.utc(`${year}-${month}-${day} ${hour}:${minute}:${second}`, 'YYYY-M-D H:m:s');
+    const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.started_at), 'YYYY-M-D H:m:s');
     const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
 
     const timer = new Tock({

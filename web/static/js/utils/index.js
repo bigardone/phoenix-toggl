@@ -1,6 +1,7 @@
 import React        from 'react';
 import fetch        from 'isomorphic-fetch';
 import { polyfill } from 'es6-promise';
+import moment       from 'moment';
 
 const defaultHeaders = {
   Accept: 'application/json',
@@ -74,4 +75,16 @@ export function renderErrorsFor(errors, ref) {
       );
     }
   });
+}
+
+export function timexDateTimeToString(date) {
+  const { year, month, day, hour, minute, second } = date;
+
+  return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+}
+
+export function timexDateToString(date) {
+  const { year, month, day } = date;
+
+  return `${year}-${month}-${day}`;
 }
