@@ -100,6 +100,16 @@ defmodule PhoenixToggl.TimeEntry do
       where: t.user_id == ^user_id and is_nil(t.stopped_at)
   end
 
+  def not_active_for_user(query, user_id) do
+    from t in query,
+      where: t.user_id == ^user_id and not(is_nil(t.stopped_at))
+  end
+
+  def sorted(query) do
+    from t in query,
+      order_by: [desc: t.updated_at]
+  end
+
   # Private functions
   ###################
 
