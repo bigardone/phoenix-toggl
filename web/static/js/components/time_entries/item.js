@@ -26,6 +26,9 @@ export default class TimeEntryItem extends React.Component {
         <div className="description-container">
           {description != '' && description != null ? description : '(no description)'}
         </div>
+        <div className="continue-container">
+          <a href="#"><i className="fa fa-play"/></a>
+        </div>
         <div className="duration-container">
           {::this._renderDuration(duration)}
         </div>

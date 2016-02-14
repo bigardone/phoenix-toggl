@@ -59,6 +59,10 @@
         cursor: pointer
         &:hover
           background: shade($light-gray, 5)
+
+          .continue-container
+            a
+              opacity: 1
         > div
           +flex(0 0 auto)
           line-height: 51px
@@ -85,15 +89,26 @@
             line-height: 15px
             top: 2px
             vertical-align: baseline
+            cursor: pointer
         &:checked + label:before
           content: "\f00c"
           font-family: FontAwesome
-          color: $base-font-color
+          color: #333
+
 
     .description-container
       +flex(1 1 auto)
 
+    .continue-container
+      a
+        +transition
+        color: shade($light-gray, 20)
+        opacity: 0
+        font-size: 1.2em
+        &:hover
+          color: $green
+
     .duration-container
-      width: 100px
+      width: 150px
       text-align: right
       padding-right: $base-spacing
