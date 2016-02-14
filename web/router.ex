@@ -25,6 +25,8 @@ defmodule PhoenixToggl.Router do
       delete "/sessions", SessionController, :delete
 
       get "/current_user", CurrentUserController, :show
+
+      resources "/time_entries", TimeEntryController, only: [:index]
     end
   end
 
