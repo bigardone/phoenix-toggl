@@ -5,6 +5,7 @@
     position: relative
     box-shadow: 0 1px 4px rgba(128,128,128,.4)
     font-size: 1.2em
+    margin-bottom: $base-spacing*2
 
     > div
       +display(flex)
@@ -37,3 +38,34 @@
       margin: 0
       box-shadow: 0 0 0
       border: 0px none
+
+  .time-entries
+    header
+      margin-bottom: $base-spacing
+      .title
+        font-size: 1.5em
+        margin-right: .5em
+    ul
+      li
+        +display(flex)
+        +transition
+        height: 52px
+        border-bottom: 1px solid shade($light-gray, 10)
+        cursor: pointer
+        &:hover
+          background: shade($light-gray, 5)
+        > div
+          +flex(0 0 auto)
+          line-height: 51px
+
+          &.checkbox-container
+            padding: 0 $base-spacing
+            text-align: center
+
+          &.description-container
+            +flex(1 1 auto)
+
+          &.duration-container
+            width: 100px
+            text-align: right
+            padding-right: $base-spacing

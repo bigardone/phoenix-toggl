@@ -4,6 +4,7 @@ import session              from './session';
 import registration         from './registration';
 import header               from './header';
 import timeEntry            from './time_entry';
+import timeEntries          from './time_entries';
 
 export default combineReducers({
   routing: routeReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
   registration: registration,
   header: header,
   timeEntry: timeEntry,
+  timeEntries: timeEntries,
 });

@@ -1,9 +1,10 @@
-import React, {PropTypes} from 'react';
-import Tock               from 'tocktimer';
-import moment             from 'moment';
-import { connect }        from 'react-redux';
-import classnames         from 'classnames';
-import Actions            from '../../actions/timer';
+import React, {PropTypes}   from 'react';
+import Tock                 from 'tocktimer';
+import moment               from 'moment';
+import { connect }          from 'react-redux';
+import classnames           from 'classnames';
+import Actions              from '../../actions/timer';
+import { appendTimeEntry }  from '../../actions/time_entries';
 
 class Timer extends React.Component {
   componentDidMount() {
@@ -51,6 +52,8 @@ class Timer extends React.Component {
       timer.stop();
 
       dispatch(Actions.stop(timer));
+      dispatch(appendTimeEntry(data));
+
       time.value = '0 sec';
       description.value = '';
     });

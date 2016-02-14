@@ -28,7 +28,6 @@ export function parseJSON(response) {
 }
 
 export function httpGet(url) {
-
   return fetch(url, {
     headers: buildHeaders(),
   })
