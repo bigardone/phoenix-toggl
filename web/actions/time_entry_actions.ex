@@ -22,6 +22,12 @@ defmodule PhoenixToggl.TimeEntryActions do
     end
   end
 
+  def stop(time_entry, stopped_at) do
+    time_entry
+    |> TimeEntry.stop(stopped_at)
+    |> Repo.update!
+  end
+
   defp perform_start(time_entry_params) do
     %TimeEntry{}
     |> TimeEntry.start(time_entry_params)

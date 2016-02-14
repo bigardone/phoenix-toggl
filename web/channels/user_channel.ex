@@ -56,8 +56,7 @@ defmodule PhoenixToggl.UserChannel do
     time_entry = current_user
     |> assoc(:time_entries)
     |> Repo.get!(id)
-    |> TimeEntry.stop(stopped_at)
-    |> Repo.update!
+    |> TimeEntryActions.stop(stopped_at)
 
     TimerMonitor.stop(current_user.id)
 
