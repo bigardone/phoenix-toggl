@@ -8,7 +8,7 @@ export default class TimeEntryItem extends React.Component {
     if (momentDuration.hours() > 0) {
       return `${momentDuration.hours()}:${momentDuration.minutes()}:${momentDuration.seconds()}`;
     } else if (momentDuration.minutes() > 0) {
-      return `${momentDuration.minutes()}:${momentDuration.seconds()} mins`;
+      return `${momentDuration.minutes()}:${momentDuration.seconds()} min`;
     } else {
       return `${momentDuration.seconds()} secs`;
     }
