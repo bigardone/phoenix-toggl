@@ -20,7 +20,8 @@ export default class TimeEntryItem extends React.Component {
     return (
       <li>
         <div className="checkbox-container">
-          <input type="checkbox"/>
+        <input id={id} type="checkbox"/>
+        <label htmlFor={id}></label>
         </div>
         <div className="description-container">
           {description != '' && description != null ? description : '(no description)'}

@@ -43,7 +43,10 @@
     margin-bottom: $base-spacing*1.5
 
     header
+      +display(flex)
       margin-bottom: $base-spacing/2
+      > div
+        line-height: 51px
       .title
         font-size: 1.3em
         margin-right: .5em
@@ -60,14 +63,37 @@
           +flex(0 0 auto)
           line-height: 51px
 
-          &.checkbox-container
-            padding: 0 $base-spacing
+    .checkbox-container
+      padding: 0 $base-spacing
+      text-align: center
+
+      [type=checkbox]
+        display: none
+        + label
+          margin-bottom: 0
+          &:before
+            content: ""
+            display: inline-block
+            height: 15px
+            width: 15px
             text-align: center
+            margin-right: 10px
+            color: #fff
+            border: solid 1px #ddd
+            background: #fff
+            position: relative
+            line-height: 15px
+            top: 2px
+            vertical-align: baseline
+        &:checked + label:before
+          content: "\f00c"
+          font-family: FontAwesome
+          color: $base-font-color
 
-          &.description-container
-            +flex(1 1 auto)
+    .description-container
+      +flex(1 1 auto)
 
-          &.duration-container
-            width: 100px
-            text-align: right
-            padding-right: $base-spacing
+    .duration-container
+      width: 100px
+      text-align: right
+      padding-right: $base-spacing

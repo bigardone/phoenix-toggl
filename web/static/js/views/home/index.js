@@ -27,8 +27,14 @@ class HomeIndexView extends React.Component {
       return (
         <section key={date} className="time-entries">
           <header>
-            <span className="title">{::this._headerText(date)}</span>
-            <small>{::this._renderTotalTime(items)}</small>
+            <div className="checkbox-container">
+              <input id={date} type="checkbox"/>
+              <label htmlFor={date}></label>
+            </div>
+            <div className="description-container">
+              <span className="title">{::this._headerText(date)}</span>
+              <small>{::this._renderTotalTime(items)}</small>
+            </div>
           </header>
           <ul>
             {::this._groupItemNodes(items)}
