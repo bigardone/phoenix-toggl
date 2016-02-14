@@ -6,7 +6,7 @@ defmodule PhoenixToggl.TimeEntry do
   alias Timex.Ecto.DateTime
   alias Timex.Date
 
-  @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :duration]}
+  @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :duration, :updated_at]}
 
   schema "time_entries" do
     field :description, :string
