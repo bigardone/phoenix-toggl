@@ -35,7 +35,7 @@ defmodule PhoenixToggl.UserChannel do
     }
 
     case TimeEntryActions.start(attributes) do
-      {:error, :active_time_entry_params_exists} ->
+      {:error, :active_time_entry_exists} ->
         {:reply, :error, socket}
       time_entry ->
         TimerMonitor.create(current_user.id)
@@ -61,6 +61,30 @@ defmodule PhoenixToggl.UserChannel do
     TimerMonitor.stop(current_user.id)
 
     {:reply, {:ok, time_entry}, socket}
+  end
+
+  def handle_in("time_entry:restart",
+  %{
+    "id" => id,
+    "restarted_at" => restarted_at,
+  }, socket) do
+    current_user = socket.assigns.current_user
+
+    {:ok, restarted_at} = Timex.DateFormat.parse(restarted_at, "{ISO}")
+
+    current_user
+    |> assoc(:time_entries)
+    |> Repo.get!(id)
+    |> TimeEntryActions.restart(restarted_at)
+    |> case do
+        {:error, :active_time_entry_exists} ->
+          {:reply, :error, socket}
+        time_entry ->
+          TimerMonitor.create(current_user.id)
+          TimerMonitor.start(current_user.id, time_entry.id, time_entry.restarted_at)
+
+          {:reply, {:ok, time_entry}, socket}
+      end
   end
 
   # In case there's an existing time entry monitor running it

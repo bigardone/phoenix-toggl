@@ -23,3 +23,17 @@ export function appendTimeEntry(item) {
     });
   };
 }
+
+export function continueTimeEntry(item) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_CONTINUE_ITEM,
+      item: item,
+    });
+
+    dispatch({
+      type: Constants.TIMER_SET_TIME_ENTRY,
+      timeEntry: item,
+    });
+  };
+}

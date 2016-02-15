@@ -21,7 +21,7 @@ defmodule PhoenixToggl.TimeEntryActionsTest do
       |> TimeEntry.start(valid_attributes)
       |> Repo.insert!
 
-    assert TimeEntryActions.start(valid_attributes) == {:error, :active_time_entry_params_exists}
+    assert TimeEntryActions.start(valid_attributes) == {:error, :active_time_entry_exists}
   end
 
   test "start", %{valid_attributes: valid_attributes} do

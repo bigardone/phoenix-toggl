@@ -13,6 +13,13 @@ export default function reducer(state = initialState, action = {}) {
       const items = [action.item].concat(state.items);
 
       return { ...state, items: items };
+
+    case Constants.TIME_ENTRIES_CONTINUE_ITEM:
+      const newItems = [...state.items];
+      const index = newItems.findIndex((item) => item.id == action.item.id);
+      newItems.splice(index, 1);
+
+      return { ...state, items: newItems };
     default:
       return state;
   }

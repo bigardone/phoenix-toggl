@@ -5,7 +5,7 @@ import { connect }                from 'react-redux';
 import classnames                 from 'classnames';
 import Actions                    from '../../actions/timer';
 import { appendTimeEntry }        from '../../actions/time_entries';
-import { timexDateTimeToString }  from '../../utils';
+import { timexDateTimeToString, setDocumentTitle }  from '../../utils';
 
 class Timer extends React.Component {
   componentDidMount() {
@@ -57,6 +57,7 @@ class Timer extends React.Component {
 
       time.value = '0 sec';
       description.value = '';
+      setDocumentTitle('Home');
     });
 
   }
@@ -67,18 +68,25 @@ class Timer extends React.Component {
 
     description.value = timeEntry.description;
 
-    const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.started_at), 'YYYY-M-D H:m:s');
-    const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
-
     const timer = new Tock({
       start: '00:00:00',
       callback: () => {
         const currentTime = moment.duration(timer.lap());
-        time.value = `${this._timeValue(currentTime.hours())}:${this._timeValue(currentTime.minutes())}:${this._timeValue(currentTime.seconds())}`;
+        const timeText = `${this._timeValue(currentTime.hours())}:${this._timeValue(currentTime.minutes())}:${this._timeValue(currentTime.seconds())}`;
+        time.value = timeText;
+
+        setDocumentTitle(timeText);
       },
     });
 
-    timer.start(initialTime);
+    if (timeEntry.restarted_at != null) {
+      timer.start(timeEntry.duration * 1000);
+    } else {
+      const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.started_at), 'YYYY-M-D H:m:s');
+      const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
+
+      timer.start(initialTime);
+    }
 
     dispatch(Actions.start(timer, timeEntry));
   }

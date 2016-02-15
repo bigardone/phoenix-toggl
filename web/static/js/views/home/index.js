@@ -4,9 +4,12 @@ import classnames                 from 'classnames';
 import moment                     from 'moment';
 import { setDocumentTitle }       from '../../utils';
 import Timer                      from '../../components/timer';
-import {fetchTimeEntries}         from '../../actions/time_entries';
+import {
+  fetchTimeEntries,
+  continueTimeEntry
+}                                 from '../../actions/time_entries';
 import TimeEntryItem              from '../../components/time_entries/item';
-import { timexDateToString }  from '../../utils';
+import { timexDateToString }      from '../../utils';
 
 class HomeIndexView extends React.Component {
   componentDidMount() {
@@ -17,12 +20,30 @@ class HomeIndexView extends React.Component {
   }
 
   _renderItems() {
-    const { items } = this.props;
+    const { items, dispatch, channel } = this.props;
 
     const groups = this._buildItemGroups(items);
 
     return Object.keys(groups).map((date) => {
       const items = groups[date];
+      const header = this._headerText(date);
+
+      const onContinueClick = (timeEntry) => {
+        console.log(timeEntry);
+
+        if (header === 'Today') {
+          const restartedAt = moment().toISOString();
+          const item = { ...timeEntry, restarted_at: restartedAt };
+
+          channel.push('time_entry:restart', item)
+          .receive('ok', (data) => {
+            dispatch(continueTimeEntry(data));
+          });
+
+        } else {
+          console.log('Clone and Continue', timeEntry);
+        }
+      };
 
       return (
         <section key={date} className="time-entries">
@@ -32,12 +53,12 @@ class HomeIndexView extends React.Component {
               <label htmlFor={date}></label>
             </div>
             <div className="description-container">
-              <span className="title">{::this._headerText(date)}</span>
+              <span className="title">{header}</span>
               <small>{::this._renderTotalTime(items)}</small>
             </div>
           </header>
           <ul>
-            {::this._groupItemNodes(items)}
+            {::this._groupItemNodes(items, onContinueClick)}
           </ul>
         </section>
       );
@@ -57,10 +78,13 @@ class HomeIndexView extends React.Component {
     }
   }
 
-  _groupItemNodes(items) {
+  _groupItemNodes(items, continueCallback) {
     return items.map((item) => {
       return (
-        <TimeEntryItem key={item.id} {...item} />
+        <TimeEntryItem
+          key={item.id}
+          continueClick={continueCallback}
+          {...item} />
       );
     });
   }
@@ -98,7 +122,7 @@ class HomeIndexView extends React.Component {
 }
 
 const mapStateToProps = (state) => (
-  { ...state.timeEntries }
+  { ...state.timeEntries, channel: state.session.channel }
 );
 
 export default connect(mapStateToProps)(HomeIndexView);

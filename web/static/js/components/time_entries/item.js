@@ -14,6 +14,12 @@ export default class TimeEntryItem extends React.Component {
     }
   }
 
+  _handleContinueClick(e) {
+    e.preventDefault();
+
+    this.props.continueClick(this.props);
+  }
+
   render() {
     const { id, description, duration } = this.props;
 
@@ -27,7 +33,7 @@ export default class TimeEntryItem extends React.Component {
           {description != '' && description != null ? description : '(no description)'}
         </div>
         <div className="continue-container">
-          <a href="#"><i className="fa fa-play"/></a>
+          <a href="#" onClick={::this._handleContinueClick}><i className="fa fa-play"/></a>
         </div>
         <div className="duration-container">
           {::this._renderDuration(duration)}
