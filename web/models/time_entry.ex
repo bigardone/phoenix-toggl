@@ -6,15 +6,14 @@ defmodule PhoenixToggl.TimeEntry do
   alias Timex.Ecto.DateTime
   alias Timex.Date
 
-  @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :duration, :updated_at]}
+  @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :restarted_at, :duration, :updated_at]}
 
   schema "time_entries" do
     field :description, :string
     field :started_at, DateTime
     field :stopped_at, DateTime
+    field :restarted_at, DateTime
     field :duration, :integer
-
-    field :restarted_at, DateTime, virtual: true
 
     belongs_to :workspace, Workspace
     belongs_to :user, User
@@ -23,8 +22,7 @@ defmodule PhoenixToggl.TimeEntry do
   end
 
   @required_fields ~w(started_at user_id)
-  @optional_fields ~w(description stopped_at duration workspace_id)
-  @restart_required_fields ~w(restarted_at)
+  @optional_fields ~w(description stopped_at duration workspace_id restarted_at)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -49,11 +47,16 @@ defmodule PhoenixToggl.TimeEntry do
   end
 
   @doc """
-  Creates a default changeset and sets the stop key value
-  on the last time_range
+  Creates a default changeset and calculates the duration depending on
+  if the TimeEntry has been restarted or not.
   """
   def stop_changeset(model, params \\ :empty) do
-    duration = Date.diff(model.started_at, params.stopped_at, :secs)
+    duration = case model.restarted_at do
+      nil ->
+        Date.diff(model.started_at, params.stopped_at, :secs)
+      restarted_at ->
+        model.duration + Date.diff(restarted_at, params.stopped_at, :secs)
+    end
 
     model
     |> changeset(params)
@@ -67,7 +70,6 @@ defmodule PhoenixToggl.TimeEntry do
   def restart_changeset(model, params \\ :empty) do
     model
     |> changeset(params)
-    |> cast(params, @restart_required_fields, @optional_fields)
     |> put_change(:stopped_at, nil)
   end
 
