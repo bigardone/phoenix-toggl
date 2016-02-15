@@ -6,7 +6,8 @@ import { setDocumentTitle }       from '../../utils';
 import Timer                      from '../../components/timer';
 import {
   fetchTimeEntries,
-  continueTimeEntry
+  continueTimeEntry,
+  startTimer
 }                                 from '../../actions/time_entries';
 import TimeEntryItem              from '../../components/time_entries/item';
 import { timexDateToString }      from '../../utils';
@@ -41,7 +42,16 @@ class HomeIndexView extends React.Component {
           });
 
         } else {
-          console.log('Clone and Continue', timeEntry);
+          const newTimeEntry = {
+            started_at: moment.utc().toISOString(),
+            description: timeEntry.description,
+            workspace_id: null,
+          };
+
+          channel.push('time_entry:start', newTimeEntry)
+          .receive('ok', (data) => {
+            dispatch(startTimer(data));
+          });
         }
       };
 

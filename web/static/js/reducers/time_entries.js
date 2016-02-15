@@ -17,6 +17,7 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.TIME_ENTRIES_CONTINUE_ITEM:
       const newItems = [...state.items];
       const index = newItems.findIndex((item) => item.id == action.item.id);
+
       newItems.splice(index, 1);
 
       return { ...state, items: newItems };

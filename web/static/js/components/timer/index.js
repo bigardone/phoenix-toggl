@@ -37,7 +37,7 @@ class Timer extends React.Component {
 
     channel.push('time_entry:start', timeEntry)
     .receive('ok', (data) => {
-      this._startTimer(data, 0);
+      this._startTimer(data);
     });
   }
 

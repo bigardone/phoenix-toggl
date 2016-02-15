@@ -37,3 +37,12 @@ export function continueTimeEntry(item) {
     });
   };
 }
+
+export function startTimer(item) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIMER_SET_TIME_ENTRY,
+      timeEntry: item,
+    });
+  };
+}
