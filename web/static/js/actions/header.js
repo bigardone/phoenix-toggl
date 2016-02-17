@@ -1,9 +1,10 @@
-import Constants              from '../constants';
-import { routeActions }       from 'react-router-redux';
-import { httpGet, httpPost }  from '../utils';
+import Constants from '../constants';
 
-const Actions = {
-
-};
-
-export default Actions;
+export function showDropdown(show) {
+  return dispatch => {
+    dispatch({
+      type: Constants.HEADER_SHOW_DROPDOWN,
+      show: show,
+    });
+  };
+}

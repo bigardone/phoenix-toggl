@@ -3,25 +3,60 @@ import { connect }      from 'react-redux';
 import { Link }         from 'react-router';
 import PageClick        from 'react-page-click';
 import { routeActions } from 'react-router-redux';
+import classnames       from 'classnames';
 
 import SessionActions   from '../actions/sessions';
-import HeaderActions    from '../actions/header';
+import {showDropdown}   from '../actions/header';
 
 class Header extends React.Component {
   _renderCurrentUser() {
-    const { currentUser } = this.props;
+    const { currentUser, showMenu } = this.props;
 
     if (!currentUser) {
       return false;
     }
 
     const fullName = [currentUser.first_name, currentUser.last_name].join(' ');
+    const classes = classnames({
+      'current-user': true,
+      visible: showMenu,
+    });
 
     return (
-      <a className="current-user">
+      <a href="#" onClick={::this._handleShowDropdownClick} className={classes}>
         {fullName}
       </a>
     );
+  }
+
+  _handleShowDropdownClick(e) {
+    e.preventDefault();
+
+    if (showMenu) return false;
+
+    const { dispatch, showMenu } = this.props;
+
+    dispatch(showDropdown(!showMenu));
+  }
+
+  _renderDropdown(show) {
+    if (!show) return false;
+
+    return (
+      <PageClick onClick={::this._handlePageClick}>
+        <ul className="dropdown">
+          <li>
+            {this._renderSignOutLink()}
+          </li>
+        </ul>
+      </PageClick>
+    );
+  }
+
+  _handlePageClick() {
+    const { dispatch } = this.props;
+
+    dispatch(showDropdown(false));
   }
 
   _renderSignOutLink() {
@@ -43,6 +78,8 @@ class Header extends React.Component {
   }
 
   render() {
+    const { showMenu } = this.props;
+
     return (
       <header id="main_header">
         <div className="container">
@@ -58,11 +95,9 @@ class Header extends React.Component {
           </nav>
           <nav className="right">
             <ul>
-              <li>
+              <li className="menu-wrapper">
                 {this._renderCurrentUser()}
-              </li>
-              <li>
-                {this._renderSignOutLink()}
+                {this._renderDropdown(showMenu)}
               </li>
             </ul>
           </nav>
@@ -73,7 +108,7 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => (
-  state.session
+  { ...state.header, ...state.session }
 );
 
 export default connect(mapStateToProps)(Header);

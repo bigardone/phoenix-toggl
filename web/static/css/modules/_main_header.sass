@@ -42,3 +42,49 @@
         display: inline-block
         padding: 0 2em
         font-size: .85em
+
+      &.menu-wrapper
+        position: relative
+
+        > a
+          +transition
+          position: relative
+
+          &:hover, &.visible
+            background: #000
+
+          &:after
+            content: ""
+            width: 0
+            height: 0
+            border: solid 6px
+            border-color: #595959 transparent transparent
+            margin-right: 30px
+            margin-top: -3px
+            display: inline-block
+            position: static
+            right: auto
+            margin: 0 0 -6px 12px
+            line-height: 45px
+
+        .dropdown
+          position: absolute
+          display: block
+          z-index: 99
+          background: #000
+          right: 0
+          width: 12em
+          animation-duration: .3s
+          animation-name: fadeIn
+          padding: .5em 0
+
+          li
+            display: block
+
+          a
+            +transition
+            padding: 0 1em
+            display: block
+
+            &:hover
+              background: tint(#333, 10)
