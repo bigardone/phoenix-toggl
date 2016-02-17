@@ -5,7 +5,9 @@ import { connect }                from 'react-redux';
 import classnames                 from 'classnames';
 import Actions                    from '../../actions/timer';
 import { appendTimeEntry }        from '../../actions/time_entries';
-import { timexDateTimeToString, setDocumentTitle }  from '../../utils';
+import {
+  timexDateTimeToString,
+  setDocumentTitle }              from '../../utils';
 
 class Timer extends React.Component {
   componentDidMount() {
@@ -80,7 +82,10 @@ class Timer extends React.Component {
     });
 
     if (timeEntry.restarted_at != null) {
-      timer.start(timeEntry.duration * 1000);
+      const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.restarted_at), 'YYYY-M-D H:m:s');
+      const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
+
+      timer.start((timeEntry.duration * 1000) + initialTime);
     } else {
       const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.started_at), 'YYYY-M-D H:m:s');
       const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
@@ -103,6 +108,21 @@ class Timer extends React.Component {
     return started ? 'Stop' : 'Start';
   }
 
+  _updateTimeEntryDescription() {
+    const { timeEntry, channel } = this.props;
+    const { description } = this.refs;
+
+    if (timeEntry != null && timeEntry.description === description.value) return false;
+
+    channel.push('time_entry:update', { description: description.value.trim() });
+  }
+
+  _handleDescriptionKeyUp(e) {
+    if (e.which != 13) return false;
+
+    this._updateTimeEntryDescription();
+  }
+
   render() {
     const { started } = this.props;
 
@@ -118,7 +138,9 @@ class Timer extends React.Component {
             type="text"
             ref="description"
             placeholder="What are you working on?"
-            tabIndex="1" />
+            tabIndex="1"
+            onBlur={::this._updateTimeEntryDescription}
+            onKeyUp={::this._handleDescriptionKeyUp}/>
         </div>
         <div className="date-time-container">
           <input

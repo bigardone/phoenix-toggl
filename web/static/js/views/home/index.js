@@ -30,8 +30,6 @@ class HomeIndexView extends React.Component {
       const header = this._headerText(date);
 
       const onContinueClick = (timeEntry) => {
-        console.log(timeEntry);
-
         if (header === 'Today') {
           const restartedAt = moment().toISOString();
           const item = { ...timeEntry, restarted_at: restartedAt };

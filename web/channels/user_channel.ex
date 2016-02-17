@@ -41,6 +41,8 @@ defmodule PhoenixToggl.UserChannel do
         TimerMonitor.create(current_user.id)
         TimerMonitor.start(current_user.id, time_entry.id, time_entry.started_at)
 
+        socket = assign(socket, :time_entry, time_entry)
+
         {:reply, {:ok, time_entry}, socket}
     end
   end
@@ -53,9 +55,7 @@ defmodule PhoenixToggl.UserChannel do
     current_user = socket.assigns.current_user
     {:ok, stopped_at} = Timex.DateFormat.parse(stopped_at, "{ISO}")
 
-    time_entry = current_user
-    |> assoc(:time_entries)
-    |> Repo.get!(id)
+    time_entry = socket.assigns.time_entry
     |> TimeEntryActions.stop(stopped_at)
 
     TimerMonitor.stop(current_user.id)
@@ -83,8 +83,18 @@ defmodule PhoenixToggl.UserChannel do
           TimerMonitor.create(current_user.id)
           TimerMonitor.start(current_user.id, time_entry.id, time_entry.restarted_at)
 
+          socket = assign(socket, :time_entry, time_entry)
+
           {:reply, {:ok, time_entry}, socket}
       end
+  end
+
+  def handle_in("time_entry:update", %{"description" => _description} = params, socket) do
+    time_entry = socket.assigns.time_entry
+    |> TimeEntry.changeset(params)
+    |> Repo.update!
+
+    {:reply, {:ok, time_entry}, assign(socket, :time_entry, time_entry)}
   end
 
   # In case there's an existing time entry monitor running it
@@ -103,7 +113,7 @@ defmodule PhoenixToggl.UserChannel do
             assign(socket, :time_entry, nil)
           time_entry ->
             TimerMonitor.create(user_id)
-            TimerMonitor.start(user_id, time_entry.id, time_entry.started_at)
+            TimerMonitor.start(user_id, time_entry.id, time_entry.restarted_at || time_entry.started_at)
             assign(socket, :time_entry, time_entry)
         end
     end
