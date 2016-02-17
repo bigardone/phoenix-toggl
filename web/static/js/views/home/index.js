@@ -16,7 +16,7 @@ class HomeIndexView extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
-    setDocumentTitle('Home');
+    setDocumentTitle('Timer');
     dispatch(fetchTimeEntries());
   }
 

@@ -60,7 +60,7 @@ export function httpDelete(url) {
 }
 
 export function setDocumentTitle(title) {
-  document.title = `${title} | Phoenix Toggl`;
+  document.title = `${title} • Phoenix Toggl`;
 }
 
 export function renderErrorsFor(errors, ref) {
