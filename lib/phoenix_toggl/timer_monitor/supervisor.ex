@@ -7,7 +7,7 @@ defmodule PhoenixToggl.TimerMonitor.Supervisor do
 
   def init(:ok) do
     children = [
-      worker(PhoenixToggl.TimerMonitor, [], restart: :temporary)
+      worker(PhoenixToggl.TimerMonitor, [], restart: :transient)
     ]
 
     supervise(children, strategy: :simple_one_for_one)
