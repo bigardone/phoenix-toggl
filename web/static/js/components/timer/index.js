@@ -7,7 +7,8 @@ import Actions                    from '../../actions/timer';
 import { appendTimeEntry }        from '../../actions/time_entries';
 import {
   timexDateTimeToString,
-  setDocumentTitle }              from '../../utils';
+  setDocumentTitle,
+  formatDuration }                from '../../utils';
 
 class Timer extends React.Component {
   componentDidMount() {
@@ -74,7 +75,7 @@ class Timer extends React.Component {
       start: '00:00:00',
       callback: () => {
         const currentTime = moment.duration(timer.lap());
-        const timeText = `${this._timeValue(currentTime.hours())}:${this._timeValue(currentTime.minutes())}:${this._timeValue(currentTime.seconds())}`;
+        const timeText = formatDuration(currentTime);
         time.value = timeText;
 
         setDocumentTitle(timeText);

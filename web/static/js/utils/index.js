@@ -88,3 +88,17 @@ export function timexDateToString(date) {
 
   return `${year}-${month}-${day}`;
 }
+
+export function formatDuration(duration) {
+  if (duration.hours() > 0) {
+    return `${numberToString(duration.hours())}:${numberToString(duration.minutes())}:${numberToString(duration.seconds())}`;
+  } else if (duration.minutes() > 0) {
+    return `${numberToString(duration.minutes())}:${numberToString(duration.seconds())} min`;
+  } else {
+    return `${duration.seconds()} sec`;
+  }
+}
+
+function numberToString(number) {
+  return number > 9 ? number : `0${number}`;
+}
