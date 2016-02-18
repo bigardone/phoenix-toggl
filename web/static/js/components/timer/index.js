@@ -46,23 +46,40 @@ class Timer extends React.Component {
 
   _stop() {
     const stoppedAt = moment().toISOString();
-    const { timer, dispatch, timeEntry, channel } = this.props;
-    const { time, description } = this.refs;
+    const { timeEntry, channel, dispatch } = this.props;
 
     timeEntry.stopped_at = stoppedAt;
 
     channel.push('time_entry:stop', timeEntry)
     .receive('ok', (data) => {
-      timer.stop();
-
-      dispatch(Actions.stop(timer));
       dispatch(appendTimeEntry(data));
 
-      time.value = '0 sec';
-      description.value = '';
-      setDocumentTitle('Home');
+      this._resetTimer();
     });
 
+  }
+
+  _handleDiscardClick(e) {
+    e.preventDefault();
+
+    const { timeEntry, channel } = this.props;
+
+    channel.push('time_entry:discard', timeEntry)
+    .receive('ok', (data) => {
+      this._resetTimer();
+    });
+  }
+
+  _resetTimer() {
+    const { time, description } = this.refs;
+    const { dispatch, timer } = this.props;
+
+    timer.stop();
+    time.value = '0 sec';
+    description.value = '';
+
+    setDocumentTitle('Home');
+    dispatch(Actions.stop(timer));
   }
 
   _startTimer(timeEntry) {
@@ -113,6 +130,7 @@ class Timer extends React.Component {
     const { timeEntry, channel } = this.props;
     const { description } = this.refs;
 
+    if (timeEntry == null) return false;
     if (timeEntry != null && timeEntry.description === description.value) return false;
 
     channel.push('time_entry:update', { description: description.value.trim() });
@@ -124,6 +142,16 @@ class Timer extends React.Component {
     this._updateTimeEntryDescription();
   }
 
+  _renderDiscardLink() {
+    const { started } = this.props;
+
+    if (!started) return false;
+
+    return (
+      <a href="#" onClick={::this._handleDiscardClick}>Discard</a>
+    );
+  }
+
   render() {
     const { started } = this.props;
 
@@ -133,30 +161,35 @@ class Timer extends React.Component {
     });
 
     return (
-      <div className="timer-wrapper">
-        <div className="description-container">
-          <input
-            type="text"
-            ref="description"
-            placeholder="What are you working on?"
-            tabIndex="1"
-            onBlur={::this._updateTimeEntryDescription}
-            onKeyUp={::this._handleDescriptionKeyUp}/>
+      <div className="timer-container">
+        <div className="timer-actions">
+          {::this._renderDiscardLink()}
         </div>
-        <div className="date-time-container">
-          <input
-            ref="time"
-            placeholder="0 sec"
-            type="text"
-            maxLength="10"
-            tabIndex="2"
-            readOnly={true}/>
-        </div>
-        <div className="button-container">
-          <button
-            tabIndex="3"
-            className={buttonClasses}
-            onClick={::this._handleButtonClick}>{::this._buttonText()}</button>
+        <div className="timer-wrapper">
+          <div className="description-container">
+            <input
+              type="text"
+              ref="description"
+              placeholder="What are you working on?"
+              tabIndex="1"
+              onBlur={::this._updateTimeEntryDescription}
+              onKeyUp={::this._handleDescriptionKeyUp}/>
+          </div>
+          <div className="date-time-container">
+            <input
+              ref="time"
+              placeholder="0 sec"
+              type="text"
+              maxLength="10"
+              tabIndex="2"
+              readOnly={true}/>
+          </div>
+          <div className="button-container">
+            <button
+              tabIndex="3"
+              className={buttonClasses}
+              onClick={::this._handleButtonClick}>{::this._buttonText()}</button>
+          </div>
         </div>
       </div>
     );

@@ -15,8 +15,6 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, started: true, timer: action.timer, timeEntry: action.timeEntry };
 
     case Constants.TIMER_STOP:
-      const { timer } = action;
-
       return { ...initialState };
 
     case Constants.TIMER_SET_TIME_ENTRY:
