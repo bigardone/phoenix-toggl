@@ -37,6 +37,17 @@ defmodule PhoenixToggl.TimeEntryActions do
     end
   end
 
+  def update(time_entry, params) do
+    time_entry
+    |> TimeEntry.changeset(params)
+    |> Repo.update!
+  end
+
+  def discard(time_entry) do
+    time_entry
+    |> Repo.delete!
+  end
+
   defp perform_start(time_entry_params) do
     %TimeEntry{}
     |> TimeEntry.start(time_entry_params)
