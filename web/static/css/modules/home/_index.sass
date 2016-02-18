@@ -1,4 +1,23 @@
 #home_index
+  .timer-container
+    position: relative
+    padding-top: $base-spacing
+
+  .timer-actions
+    position: absolute
+    top: 0
+    right: 0
+    z-index: 9
+    line-height: 1em
+
+    a
+      color: $blue
+      font-weight: bold
+      font-size: .8em
+
+      &:hover
+        color: $light-blue
+
   .timer-wrapper
     +display(flex)
     background-color: #fff
