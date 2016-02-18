@@ -2,8 +2,10 @@ import React            from 'react';
 import { connect }      from 'react-redux';
 import Actions          from '../actions/sessions';
 import { routeActions } from 'react-router-redux';
+import Favicon          from 'react-favicon';
 
 import Header           from '../layouts/header';
+import { faviconData }  from '../utils';
 
 class AuthenticatedContainer extends React.Component {
   componentDidMount() {
@@ -16,6 +18,16 @@ class AuthenticatedContainer extends React.Component {
     }
   }
 
+  _renderFavicon() {
+    const { timeEntry } = this.props;
+
+    const url = timeEntry.started ? faviconData.on : faviconData.off;
+
+    return (
+      <Favicon url={url} />
+    );
+  }
+
   render() {
     const { currentUser, dispatch, socket } = this.props;
 
@@ -23,6 +35,7 @@ class AuthenticatedContainer extends React.Component {
 
     return (
       <div id="authentication_container" className="application-container">
+        {::this._renderFavicon()}
         <Header/>
 
         <div className='main-container'>
@@ -37,6 +50,7 @@ const mapStateToProps = (state) => ({
   currentUser: state.session.currentUser,
   socket: state.session.socket,
   channel: state.session.channel,
+  timeEntry: state.timeEntry,
 });
 
 export default connect(mapStateToProps)(AuthenticatedContainer);
