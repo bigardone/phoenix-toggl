@@ -95,7 +95,7 @@ class Timer extends React.Component {
         const timeText = formatDuration(currentTime);
         time.value = timeText;
 
-        setDocumentTitle(timeText);
+        setDocumentTitle(`${timeText} - ${description.value.trim()}`);
       },
     });
 
