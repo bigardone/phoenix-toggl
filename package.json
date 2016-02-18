@@ -23,6 +23,7 @@
     "react": "^0.14.7",
     "react-addons-css-transition-group": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-favicon": "0.0.3",
     "react-gravatar": "^2.3.0",
     "react-page-click": "^2.0.0",
     "react-redux": "^4.1.1",

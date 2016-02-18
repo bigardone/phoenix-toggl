@@ -95,6 +95,7 @@ exports.config = {
       'redux',
       'redux-logger',
       'redux-thunk',
+      'react-favicon',
     ],
   },
 };
