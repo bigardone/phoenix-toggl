@@ -49,7 +49,7 @@ defmodule PhoenixToggl.UserChannel do
 
   def handle_in("time_entry:stop",
   %{
-    "id" => id,
+    "id" => _id,
     "stopped_at" => stopped_at,
   }, socket) do
     current_user = socket.assigns.current_user
@@ -60,7 +60,7 @@ defmodule PhoenixToggl.UserChannel do
 
     TimerMonitor.stop(current_user.id)
 
-    {:reply, {:ok, time_entry}, socket}
+    {:reply, {:ok, time_entry}, assign(socket, :time_entry, nil)}
   end
 
   def handle_in("time_entry:restart",
@@ -91,10 +91,20 @@ defmodule PhoenixToggl.UserChannel do
 
   def handle_in("time_entry:update", %{"description" => _description} = params, socket) do
     time_entry = socket.assigns.time_entry
-    |> TimeEntry.changeset(params)
-    |> Repo.update!
+    |> TimeEntryActions.update(params)
 
     {:reply, {:ok, time_entry}, assign(socket, :time_entry, time_entry)}
+  end
+
+  def handle_in("time_entry:discard", %{"id" => _id}, socket) do
+    current_user = socket.assigns.current_user
+
+    time_entry = socket.assigns.time_entry
+    |> TimeEntryActions.discard
+
+    TimerMonitor.stop(current_user.id)
+
+    {:reply, {:ok, time_entry}, assign(socket, :time_entry, nil)}
   end
 
   # In case there's an existing time entry monitor running it
