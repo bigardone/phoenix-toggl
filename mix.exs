@@ -52,7 +52,7 @@ defmodule PhoenixToggl.Mixfile do
       {:guardian, "~> 0.9.0"},
       {:credo, "~> 0.2", only: [:dev, :test]},
       {:timex, "~> 1.0"},
-      {:timex_ecto, "~> 0.7.0"},
+      {:timex_ecto, "~> 0.9.0"},
       {:mix_test_watch, "~> 0.2", only: :dev},
       {:ex_machina, "~> 0.6.1", only: :test}
     ]

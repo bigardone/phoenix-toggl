@@ -112,6 +112,12 @@ defmodule PhoenixToggl.TimeEntry do
       order_by: [desc: t.updated_at]
   end
 
+  def total_duration_for_date(query, date) do
+    from t in query,
+      select: sum(t.duration),
+      where: fragment("date(?) = date(?)", t.started_at, type(^date, Ecto.Date))
+  end
+
   # Private functions
   ###################
 
