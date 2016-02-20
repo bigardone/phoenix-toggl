@@ -2,6 +2,7 @@ defmodule PhoenixToggl.UserChannel do
   use PhoenixToggl.Web, :channel
 
   alias PhoenixToggl.{TimerMonitor, TimeEntry, TimeEntryActions}
+  alias PhoenixToggl.Reports.Reporter
 
   def join("users:" <> user_id, _params, socket) do
     user_id = String.to_integer(user_id)
@@ -105,6 +106,15 @@ defmodule PhoenixToggl.UserChannel do
     TimerMonitor.stop(current_user.id)
 
     {:reply, {:ok, time_entry}, assign(socket, :time_entry, nil)}
+  end
+
+  def handle_in("reports:generate", _params, socket) do
+    current_user = socket.assigns.current_user
+
+    data = %{user: current_user}
+      |> Reporter.generate
+
+    {:reply, {:ok, data}, socket}
   end
 
   # In case there's an existing time entry monitor running it
