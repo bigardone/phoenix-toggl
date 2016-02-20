@@ -1,0 +1,133 @@
+#reports_index
+  .view-header
+    +clearfix
+    margin: $base-spacing 0
+    h1
+      +span-columns(8)
+      font-family: $base-font-family
+      font-size: 2em
+      font-weight: 400
+      line-height: 4rem
+      margin-bottom: 0
+      color: #333
+
+    .range-selector
+      +span-columns(4)
+      text-align: right
+
+      h2
+        font-family: $base-font-family
+        font-size: 1.6em
+        font-weight: 400
+        margin-bottom: 0
+        line-height: 4rem
+        color: #333
+
+  .chart-container
+    header
+      margin-bottom: $base-spacing
+      span
+        display: inline-block
+        vertical-align: middle
+      .total
+        color: #333
+        font-size: 1.6em
+        font-weight: bold
+        margin-left: 1em
+
+    .js-chart-container
+      height: 324px
+
+      .barchart-container
+        height: 100%
+        border-bottom: 1px solid $gray
+        padding-bottom: 66px
+
+        .barchart-chart
+          box-shadow: 0 1px 3px rgba($gray,.2)
+          position: relative
+          height: 100%
+          padding-top: 54px
+          background: #fff
+
+          .barchart-grid
+            overflow: hidden
+            position: absolute
+            bottom: 0
+            width: 100%
+            height: 100%
+            padding: 54px 60px 0
+            border-bottom: 4px solid #ddd
+
+            li
+              color: #ddd
+              font-weight: 600
+              font-size: 12px
+              position: relative
+              border-top: 1px dotted #e6e6e6
+              height: 20%
+
+              span
+                text-align: center
+                position: absolute
+                top: -6px
+                right: -60px
+                width: 60px
+                font-weight: 400
+
+          .barchart-cols
+            position: absolute
+            top: 54px
+            left: 0
+            right: 0
+            bottom: 0
+            padding: 0 60px
+            text-align: center
+
+            li
+              width: 14.28%
+              margin: 0
+              display: inline-block
+              text-align: center
+              position: relative
+              min-width: 12px
+              height: 100%
+
+              .bar
+                +transition(height .3s ease-out)
+                color: #2cc1e6
+                font-weight: 600
+                position: absolute
+                bottom: 0
+                background: #2cc1e6
+                min-height: 2%
+                width: 75%
+
+                &.zero-col
+                  height: 2%
+                  background: $gray
+                  color: $gray
+
+                .label
+                  color: #929292
+                  font-weight: 600
+                  font-size: 12px
+                  position: absolute
+                  left: 50%
+                  width: 72px
+                  margin-left: -36px
+                  margin-bottom: 4px
+                  bottom: -67px
+                  height: 57px
+                  line-height: 19px
+                  white-space: nowrap
+
+                .value
+                  font-size: 15px
+                  position: absolute
+                  top: -42px
+                  left: 50%
+                  width: 48px
+                  margin-left: -24px
+                  padding: 12px 0
+                  white-space: nowrap
