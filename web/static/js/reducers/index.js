@@ -5,6 +5,7 @@ import registration         from './registration';
 import header               from './header';
 import timeEntry            from './time_entry';
 import timeEntries          from './time_entries';
+import reports              from './reports';
 
 export default combineReducers({
   routing: routeReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   header: header,
   timeEntry: timeEntry,
   timeEntries: timeEntries,
+  reports: reports,
 });
