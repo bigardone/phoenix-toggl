@@ -22,6 +22,7 @@ defmodule PhoenixToggl.TimeEntry do
   end
 
   @required_fields ~w(started_at user_id)
+  @restart_required_fields ~w(restarted_at)
   @optional_fields ~w(description stopped_at duration workspace_id restarted_at)
 
   @doc """
@@ -70,6 +71,7 @@ defmodule PhoenixToggl.TimeEntry do
   def restart_changeset(model, params \\ :empty) do
     model
     |> changeset(params)
+    |> cast(params, @restart_required_fields, @optional_fields)
     |> put_change(:stopped_at, nil)
   end
 
