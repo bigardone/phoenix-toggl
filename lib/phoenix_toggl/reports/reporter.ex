@@ -16,17 +16,11 @@ defmodule PhoenixToggl.Reports.Reporter do
 
   defp generate_data(%{user: user}) do
     now = Date.now
-    start_date = now |> Date.add(Time.to_timestamp(500, :days))
+    start_date = Date.beginning_of_week(now, :mon)
     end_date = Date.end_of_week(now, :mon)
 
     days = Date.diff(start_date, end_date, :days)
-
-    days_data = 0..days
-      |> Enum.map(fn(day) ->
-        Task.async(fn -> calculate_day(user, start_date, day) end)
-      end)
-      |> Enum.map(&(Task.await(&1)))
-
+    days_data = process_days(user, days, start_date)
     total_duration = calculate_total_duration(days_data)
 
     %Data{
@@ -36,6 +30,13 @@ defmodule PhoenixToggl.Reports.Reporter do
       total_duration: total_duration,
       days: days_data
     }
+  end
+
+  defp process_days(user, days, start_date) do
+    0..days
+    |> Enum.map(fn(day) -> Task.async(fn -> calculate_day(user, start_date, day) end) end)
+    |> Enum.map(&(Task.await(&1)))
+    |> Enum.sort(&(&1.id < &2.id))
   end
 
   defp calculate_day(user, start_date, day_number) do
@@ -52,9 +53,8 @@ defmodule PhoenixToggl.Reports.Reporter do
         duration -> duration
       end
 
-    IO.puts "Day #{day_number}"
-
     %Day{
+      id: day_number,
       date: date,
       duration: total_duration
     }
