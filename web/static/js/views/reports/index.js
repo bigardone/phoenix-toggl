@@ -1,11 +1,14 @@
-import React, {PropTypes} from 'react';
-import { connect }        from 'react-redux';
-import { fetchData }      from '../../actions/reports';
-import ReportContainer    from '../../components/reports/container';
+import React, {PropTypes}   from 'react';
+import { connect }          from 'react-redux';
+import { fetchData }        from '../../actions/reports';
+import ReportContainer      from '../../components/reports/container';
+import { setDocumentTitle } from '../../utils';
 
 class ReportsIndeView extends React.Component {
   componentDidMount() {
     const { dispatch, channel } = this.props;
+
+    setDocumentTitle('Reports');
 
     if (channel == null) return false;
 
