@@ -24,9 +24,45 @@
         color: #333
         display: inline-block
         margin-right: .3em
+        position: relative
+        cursor: pointer
 
-      .fa
-        display: inline-block
+        &:after
+          content: ""
+          width: 0
+          height: 0
+          border: solid 6px
+          border-color: $gray transparent transparent
+          display: inline-block
+          position: static
+          right: auto
+          margin: 0 0 -3px 12px
+          line-height: 45px
+
+      > ul
+        > li
+          position: relative
+
+      .dropdown
+        position: absolute
+        display: block
+        z-index: 99
+        right: 0
+        animation-duration: .3s
+        animation-name: fadeIn
+        padding: 1em
+        background: $gray
+        li
+          display: inline-block
+
+          &:not(:last-of-type)
+            margin-right: 1em
+
+          a
+            color: $dark-gray
+            &:hover
+              color: $base-font-color
+
 
   .chart-container
     header
