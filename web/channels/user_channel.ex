@@ -111,7 +111,7 @@ defmodule PhoenixToggl.UserChannel do
   def handle_in("reports:generate", _params, socket) do
     current_user = socket.assigns.current_user
 
-    data = %{user: current_user}
+    data = %{user: current_user, number_of_weeks: 1}
       |> Reporter.generate
 
     {:reply, {:ok, data}, socket}
