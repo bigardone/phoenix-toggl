@@ -118,7 +118,7 @@ defmodule PhoenixToggl.UserChannel do
   end
 
   # In case there's an existing time entry monitor running it
-  # assigns it's TimeEntry to the socket. Otherwise it will try
+  # assigns its TimeEntry to the socket. Otherwise it will try to
   # find an active TimeEntry in the database and start a new monitor
   # with it.
   defp set_active_time_entry(socket, user_id) do
