@@ -96,7 +96,7 @@
       border: 1px solid transparent
       margin-right: $small-spacing
 
-      &:hover
+      &:hover, &.active
         border: 1px solid $gray
         .fa-caret-down
           opacity: 1
@@ -147,6 +147,9 @@
         width: 10em
         padding: 4px 0
         text-align: left
+        box-shadow: 0 1px 3px rgba($gray,.5)
+        margin-top: -3px
+        margin-left: -1px
 
         li
           display: block
