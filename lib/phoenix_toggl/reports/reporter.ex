@@ -6,7 +6,7 @@ defmodule PhoenixToggl.Reports.Reporter do
   alias PhoenixToggl.Reports.{Data, Day}
   alias Timex.{Date, Time, DateFormat}
 
-  @format_string "{s-epoch}"
+  @format_string "%Y-%m-%d"
 
   def generate(), do: {:error, :invalid_params}
   def generate(%{user: _user, number_of_weeks: _number_of_weeks} = params) do
@@ -27,8 +27,8 @@ defmodule PhoenixToggl.Reports.Reporter do
 
     %Data{
       user_id: user.id,
-      start_date: start_date |> DateFormat.format!("%Y-%m-%d", :strftime),
-      end_date: end_date |> DateFormat.format!("%Y-%m-%d", :strftime),
+      start_date: format_date(start_date),
+      end_date: format_date(end_date),
       total_duration: total_duration,
       days: days_data
     }
@@ -44,7 +44,7 @@ defmodule PhoenixToggl.Reports.Reporter do
   defp calculate_day(user, start_date, day_number) do
     date = start_date
       |> Date.add(Time.to_timestamp(day_number, :days))
-      |> DateFormat.format!("%Y-%m-%d", :strftime)
+      |> format_date
 
     total_duration = user
       |> Ecto.assoc(:time_entries)
@@ -63,4 +63,6 @@ defmodule PhoenixToggl.Reports.Reporter do
   end
 
   defp calculate_total_duration(days_data), do: Enum.reduce(days_data, 0, fn(x, acc) -> x.duration + acc end)
+
+  defp format_date(date), do: DateFormat.format!(date, @format_string, :strftime)
 end

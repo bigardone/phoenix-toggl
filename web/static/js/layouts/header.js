@@ -16,7 +16,6 @@ class Header extends React.Component {
       return false;
     }
 
-    const fullName = [currentUser.first_name, currentUser.last_name].join(' ');
     const classes = classnames({
       'current-user': true,
       visible: showMenu,
@@ -24,7 +23,7 @@ class Header extends React.Component {
 
     return (
       <a href="#" onClick={::this._handleShowDropdownClick} className={classes}>
-        {fullName}
+        {currentUser.first_name}
       </a>
     );
   }
@@ -65,7 +64,7 @@ class Header extends React.Component {
     }
 
     return (
-      <a href="#" onClick={::this._handleSignOutClick}><i className="fa fa-sign-out"/> Sign out</a>
+      <a href="#" onClick={::this._handleSignOutClick}>Sign out</a>
     );
   }
 
