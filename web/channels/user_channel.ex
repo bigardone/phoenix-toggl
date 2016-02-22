@@ -108,6 +108,17 @@ defmodule PhoenixToggl.UserChannel do
     {:reply, {:ok, time_entry}, assign(socket, :time_entry, nil)}
   end
 
+  def handle_in("time_entry:delete", %{"id" => id}, socket) do
+    current_user = socket.assigns.current_user
+
+    time_entry = current_user
+      |> assoc(:time_entries)
+      |> Repo.get!(id)
+      |> TimeEntryActions.discard
+
+    {:reply, {:ok, time_entry}, socket}
+  end
+
   def handle_in("reports:generate", %{"number_of_weeks" => number_of_weeks}, socket) do
     current_user = socket.assigns.current_user
 
