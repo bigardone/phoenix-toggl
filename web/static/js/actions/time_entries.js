@@ -27,7 +27,7 @@ export function appendTimeEntry(item) {
 export function continueTimeEntry(item) {
   return dispatch => {
     dispatch({
-      type: Constants.TIME_ENTRIES_CONTINUE_ITEM,
+      type: Constants.TIME_ENTRIES_REMOVE_ITEM,
       item: item,
     });
 
@@ -43,6 +43,24 @@ export function startTimer(item) {
     dispatch({
       type: Constants.TIMER_SET_TIME_ENTRY,
       timeEntry: item,
+    });
+  };
+}
+
+export function displayDropdown(id) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_DISPLAY_DROPDOWN_FOR,
+      id: id,
+    });
+  };
+}
+
+export function removeTimeEntry(item) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_REMOVE_ITEM,
+      item: item,
     });
   };
 }

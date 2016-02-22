@@ -59,6 +59,7 @@ class HomeIndexView extends React.Component {
             <div className="checkbox-container">
               <input id={date} type="checkbox"/>
               <label htmlFor={date}></label>
+              <i className="fa fa-caret-down"/>
             </div>
             <div className="description-container">
               <span className="title">{header}</span>
@@ -87,11 +88,18 @@ class HomeIndexView extends React.Component {
   }
 
   _groupItemNodes(items, continueCallback) {
+    const { displayDropdownFor, dispatch, channel } = this.props;
+
     return items.map((item) => {
+      const displayDropdown = item.id === displayDropdownFor;
+
       return (
         <TimeEntryItem
           key={item.id}
           continueClick={continueCallback}
+          displayDropdown={displayDropdown}
+          dispatch={dispatch}
+          channel={channel}
           {...item} />
       );
     });

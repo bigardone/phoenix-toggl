@@ -88,20 +88,40 @@
           line-height: 51px
 
     .checkbox-container
-      padding: 0 $base-spacing
+      +transition
+      padding: 0 0 0 $base-spacing
       text-align: center
+      position: relative
+      cursor: pointer
+      border: 1px solid transparent
+      margin-right: $small-spacing
+
+      &:hover
+        border: 1px solid $gray
+        .fa-caret-down
+          opacity: 1
+
+
+      .fa-caret-down
+        +transition
+        display: inline-block
+        opacity: 0
+        font-size: 1.2em
+        padding: 0 $small-spacing
+        line-height: 52px
+
 
       [type=checkbox]
         display: none
         + label
           margin-bottom: 0
+          display: inline-block
           &:before
             content: ""
             display: inline-block
             height: 15px
             width: 15px
             text-align: center
-            margin-right: 10px
             color: #fff
             border: solid 1px #ddd
             background: #fff
@@ -114,6 +134,33 @@
           content: "\f00c"
           font-family: FontAwesome
           color: #333
+
+      .dropdown
+        position: absolute
+        display: block
+        z-index: 99
+        left: 0
+        animation-duration: .3s
+        animation-name: fadeIn
+        background: #fff
+        border: 1px solid $gray
+        width: 10em
+        padding: 4px 0
+        text-align: left
+
+        li
+          display: block
+          height: auto
+          border-bottom: 0px none
+
+          a
+            display: block
+            color: $dark-gray
+            line-height: 2em
+            padding: 0 1em
+            &:hover
+              color: $base-font-color
+
 
 
     .description-container

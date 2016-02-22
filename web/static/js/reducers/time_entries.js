@@ -2,6 +2,7 @@ import Constants  from '../constants';
 
 const initialState = {
   items: [],
+  displayDropdownFor: 0,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -14,13 +15,16 @@ export default function reducer(state = initialState, action = {}) {
 
       return { ...state, items: items };
 
-    case Constants.TIME_ENTRIES_CONTINUE_ITEM:
+    case Constants.TIME_ENTRIES_REMOVE_ITEM:
       const newItems = [...state.items];
-      const index = newItems.findIndex((item) => item.id == action.item.id);
+      const index = newItems.findIndex((item) => item.id === action.item.id);
 
       newItems.splice(index, 1);
 
-      return { ...state, items: newItems };
+      return { ...state, items: newItems, displayDropdownFor: 0 };
+
+    case Constants.TIME_ENTRIES_DISPLAY_DROPDOWN_FOR:
+      return { ...state, displayDropdownFor: action.id };
 
     case Constants.USER_SIGNED_OUT:
       return initialState;
