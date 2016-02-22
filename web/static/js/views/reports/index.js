@@ -1,8 +1,9 @@
 import React, {PropTypes}   from 'react';
 import { connect }          from 'react-redux';
 import { fetchData }        from '../../actions/reports';
-import ReportContainer      from '../../components/reports/container';
 import { setDocumentTitle } from '../../utils';
+import ReportContainer      from '../../components/reports/container';
+import RangeSelector        from '../../components/reports/range_selector';
 
 class ReportsIndeView extends React.Component {
   componentDidMount() {
@@ -30,9 +31,7 @@ class ReportsIndeView extends React.Component {
         <div className="container">
           <header className="view-header">
             <h1>Summary report</h1>
-            <div className="range-selector">
-              <h2>This week</h2>
-            </div>
+            <RangeSelector />
           </header>
           <ReportContainer data={data} />
         </div>
