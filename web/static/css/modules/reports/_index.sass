@@ -51,7 +51,7 @@
         animation-duration: .3s
         animation-name: fadeIn
         padding: 1em
-        background: $gray
+        background: tint($gray, 20)
         li
           display: inline-block
 
@@ -90,6 +90,23 @@
           height: 100%
           padding-top: 54px
           background: #fff
+
+          &.hide-labels
+            li:nth-child(even)
+              .label, .value
+                opacity: 0
+
+            .bar
+              .label, .value
+                +transition
+            li:hover
+              .bar
+                .label, .value
+                  opacity: 1
+
+          &:hover
+            .label, .value
+              opacity: 0
 
           .barchart-grid
             overflow: hidden

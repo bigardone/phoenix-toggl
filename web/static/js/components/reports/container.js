@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import moment             from 'moment';
+import classnames         from 'classnames';
 import { formatDuration}  from '../../utils';
 import ChartGrid          from './grid';
 import ChartBar           from './bar';
@@ -11,12 +12,15 @@ export default class ReportContainer extends React.Component {
     return formatDuration(moment.duration(total_duration * 1000));
   }
 
-  _renderBars(data) {
+  _renderBars(data, hideLabels) {
     const { days } = data;
 
     const barItems = days.map((item) => {
       return (
-        <ChartBar key={item.id} {...item} />
+        <ChartBar
+          key={item.id}
+          hideLabels={hideLabels}
+          {...item} />
       );
     });
 
@@ -28,9 +32,14 @@ export default class ReportContainer extends React.Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data, hideLabels } = this.props;
 
     if (data == null) return false;
+
+    const chartClasses = classnames({
+      'barchart-chart': true,
+      'hide-labels': hideLabels,
+    });
 
     return (
       <section className="chart-container">
@@ -39,9 +48,9 @@ export default class ReportContainer extends React.Component {
         </header>
         <div className="js-chart-container">
           <div className="barchart-container">
-            <div className="barchart-chart">
+            <div className={chartClasses}>
               <ChartGrid />
-              {::this._renderBars(data)}
+              {::this._renderBars(data, hideLabels)}
             </div>
           </div>
         </div>

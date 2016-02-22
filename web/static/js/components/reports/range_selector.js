@@ -55,7 +55,9 @@ export default class RangeSelector extends React.Component {
   _handleShowClick(e) {
     const { dispatch, show } = this.props;
 
-    dispatch(showRangeSelector(!show));
+    if (show) return false;
+
+    dispatch(showRangeSelector(true));
   }
 
   render() {

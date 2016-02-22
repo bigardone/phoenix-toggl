@@ -37,7 +37,9 @@ class ReportsIndeView extends React.Component {
               dispatch={dispatch}
               {...filter}/>
           </header>
-          <ReportContainer data={data} />
+          <ReportContainer
+            data={data}
+            hideLabels={filter.numberOfWeeks > 2} />
         </div>
       </div>
     );

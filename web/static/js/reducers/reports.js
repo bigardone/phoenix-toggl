@@ -28,7 +28,7 @@ export default function reducer(state = initialState, action = {}) {
 
     case Constants.REPORTS_DATA_FECTH_SUCCESS:
       const text = filterText(action.numberOfWeeks);
-      return { ...state, data: action.data, fetching: false, filter: { ...state.filter, show: false, text: text } };
+      return { ...state, data: action.data, fetching: false, filter: { ...state.filter, numberOfWeeks: action.numberOfWeeks, show: false, text: text } };
 
     case Constants.REPORTS_SHOW_RANGE_SELECTOR:
       return { ...state, filter: { ...state.filter, show: action.show } };
