@@ -22,6 +22,11 @@
         margin-bottom: 0
         line-height: 4rem
         color: #333
+        display: inline-block
+        margin-right: .3em
+
+      .fa
+        display: inline-block
 
   .chart-container
     header
@@ -76,6 +81,7 @@
                 font-weight: 400
 
           .barchart-cols
+            +display(flex)
             position: absolute
             top: 54px
             left: 0
@@ -85,7 +91,7 @@
             text-align: center
 
             li
-              width: 14.28%
+              +flex(1)
               margin: 0
               display: inline-block
               text-align: center
