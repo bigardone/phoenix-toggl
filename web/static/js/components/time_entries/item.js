@@ -1,10 +1,13 @@
 import React, {PropTypes}  from 'react';
 import moment              from 'moment';
 import PageClick           from 'react-page-click';
+import classnames          from 'classnames';
 import { formatDuration }  from '../../utils';
 import {
   displayDropdown,
-  removeTimeEntry }        from '../../actions/time_entries';
+  removeTimeEntry,
+  selectTimeEntry,
+  deselectTimeEntry }      from '../../actions/time_entries';
 
 export default class TimeEntryItem extends React.Component {
   _renderDuration(duration) {
@@ -69,13 +72,25 @@ export default class TimeEntryItem extends React.Component {
     );
   }
 
+  _handleCheckboxChange() {
+    const { checkbox } = this.refs;
+    const { id, dispatch } = this.props;
+
+    checkbox.checked ? dispatch(selectTimeEntry(id)) : dispatch(deselectTimeEntry(id));
+  }
+
   render() {
-    const { id, description, duration } = this.props;
+    const { id, description, duration, displayDropdown } = this.props;
+
+    const checkboxClasses = classnames({
+      'checkbox-container': true,
+      active: displayDropdown,
+    });
 
     return (
       <li>
-        <div className="checkbox-container">
-          <input id={id} type="checkbox"/>
+        <div className={checkboxClasses}>
+          <input ref="checkbox" id={id} type="checkbox" onChange={::this._handleCheckboxChange}/>
           <label htmlFor={id}></label>
           <i className="fa fa-caret-down" onClick={::this._handleCheckboxClick}/>
           {::this._renderDropdown()}

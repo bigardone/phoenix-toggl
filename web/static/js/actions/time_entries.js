@@ -64,3 +64,21 @@ export function removeTimeEntry(item) {
     });
   };
 }
+
+export function selectTimeEntry(id) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_SELECT_ITEM,
+      id: id,
+    });
+  };
+}
+
+export function deselectTimeEntry(id) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_DESELECT_ITEM,
+      id: id,
+    });
+  };
+}
