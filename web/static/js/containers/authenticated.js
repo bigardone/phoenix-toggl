@@ -5,7 +5,9 @@ import { routeActions } from 'react-router-redux';
 import Favicon          from 'react-favicon';
 
 import Header           from '../layouts/header';
-import { faviconData }  from '../utils';
+import {
+  faviconData,
+  creditsText }         from '../utils';
 
 class AuthenticatedContainer extends React.Component {
   componentDidMount() {
@@ -41,6 +43,11 @@ class AuthenticatedContainer extends React.Component {
         <div className='main-container'>
           {this.props.children}
         </div>
+        <footer id="main_footer">
+          <div className="container">
+            {creditsText()}
+          </div>
+        </footer>
       </div>
     );
   }

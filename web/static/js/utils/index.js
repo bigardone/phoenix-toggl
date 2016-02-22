@@ -108,6 +108,15 @@ export const faviconData = {
   on: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAYAAADhu0ooAAAAAXNSR0IArs4c6QAABDtJREFUaAXlm99PE0EQx2evKIVChIRDE4X4ohh9NEZ8QP4FTAzwqH+EAaOvRhP/CF+BmOi/QHgQY3zUSHwxoIm2JiA/K/YY57vtHu3Sa4+Kpbds0tzu/dibT+dmbndnTtF/KB+ITg+k/ZuUUreIeIgUDRGr87LtVkzduCUr2iCWn+Jvsl0iUksU8JuVfO7tNaLdoxZLHVWHWfK70hm6Kx1OitAjAtXZUN9M2/I3LDDRTH6LXvZTbrOhfqyL/hn0V7t/SbXRtCI12TCcJVTYFGgmnuECPTvzO/c53N9ApWHQ1XTPxbbUqadyz3FSymvg3vEvYd6Tk+cKwZ+Hvfm1L/Ev3D/z0KCwv8FO/4HAPRINdux31YQa0w4xP1nezj0/rB0fCjSb8c+llXolFw03ASvyFmK/i3nmO/1bue+RJ1kHYoOudfZdTyn1WjR5werjeJrMXwPmsZ7tn+/jCBDLtta6/PGU8hZaBhJk8odDJsh2JKDrGX8qRWq26fYYR3rxEZANMtY7veajK//WhHQ0U6+TVjgeEE/0bObmomSJBC3aJB7XJnvWKEnr7RePHPDeSJTNVgWFd5X3xruWssl6oDguDmqH6EY1b3zAGeE9iVdI4iABKg4KsoMBzfJyABSDAVHzsb4nywU8bB2y6wGNdWHFo1sc1p3+mBi7tGDCpthrIdi9Wj5crNCoHrsmxfmEVFUqwlAah4cHQ41iFuK10Sd5zivgwzOTVpGJwF6BrphZTwiFqZYzkFCKKEwzlRSkNYpJc0dG/RDbbGyy3KralvnszhafxeRdaxQrA85Baq1Sp2aTugYVtcryh5vFsHnFl6us8Thb1AgY1Ubav01tat5ZToAVeNTjlErsKCiucsAoNirrrs4XHvLE27oPKoyeXkF3XaMSJYBGdYjAaVZh9EwsxGVQMIZjXZdBwebpqJbjlGAUZyShO9eLMIozkvik60UYoVEJwjpehFGckUSanS9qyVMBLzrPKSkDClOYwUz/qpMTb2hQVhmWt7K9XjGgygvuapUXwKgHDEiMcBXUsJ2sxTGskiH7wzWtgsmk74RjXaS4SDQK2R9uFGHRTCWaELS0oh0ZSE0g/ZxZpYfs2kYNxIkJMunok+TxGPDEboWhPJIGjgqNYgcGEANd/fNyIJGrg8hBWtnMjtoJVwdAAXsiQvsARQ4AkpVk+CQpAQkpOlmDx6rlL4Ag9Lo2DrI7AsX37P2t2oasURkpkDkSFAeRt8PM06i3coGMtXKMIHtVG7WhdGIVqxdydnOzOW1B7DYeV8X3BXLWPmS3Y4HiohOR9AhQPP9IVoL7Rvs4C2SALLVs0pavpo3aJ8Oj4R1Fe/z4WDwy3gJyb8gQ5V1tmU079qNrLjBb51PNDajZrrf3XZZA8pSzHw8YULN1/nMQA1q+1QtuaX+4GE2P/4EPViSX87lFe5xa3nej9b9Uzbh0HJ7RFAAAAABJRU5ErkJggg==',
 };
 
+export function creditsText() {
+  return (
+    <p>
+      <a href="https://toggl.com/" target="_blank">Toggl</a> tribute for educational purposes
+      crafted with <strong>♥</strong> by <a href="https://twitter.com/bigardone">@bigardone</a>
+    </p>
+  );
+}
+
 function numberToString(number) {
   return number > 9 ? number : `0${number}`;
 }
