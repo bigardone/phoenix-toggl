@@ -2,7 +2,9 @@ import React, {PropTypes}   from 'react';
 import { connect }          from 'react-redux';
 import { Link }             from 'react-router';
 
-import { setDocumentTitle } from '../../utils';
+import {
+  setDocumentTitle,
+  creditsText }             from '../../utils';
 import Actions              from '../../actions/sessions';
 
 class SessionsNewView extends React.Component {
@@ -38,6 +40,7 @@ class SessionsNewView extends React.Component {
           <div className="inner">
             <header>
               <div className="logo" />
+              {creditsText()}
             </header>
             <form id="sign_in_form" onSubmit={::this._handleSubmit}>
               {::this._renderError()}

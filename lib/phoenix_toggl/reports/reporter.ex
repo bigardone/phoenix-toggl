@@ -9,14 +9,16 @@ defmodule PhoenixToggl.Reports.Reporter do
   @format_string "{s-epoch}"
 
   def generate(), do: {:error, :invalid_params}
-  def generate(%{user: _user} = params) do
+  def generate(%{user: _user, number_of_weeks: _number_of_weeks} = params) do
     generate_data params
   end
   def generate(_), do: {:error, :invalid_params}
 
-  defp generate_data(%{user: user}) do
+  defp generate_data(%{user: user, number_of_weeks: number_of_weeks}) do
     now = Date.now
-    start_date = Date.beginning_of_week(now, :mon)
+    start_date = now
+      |> Date.subtract(Time.to_timestamp(number_of_weeks - 1, :weeks))
+      |> Date.beginning_of_week(:mon)
     end_date = Date.end_of_week(now, :mon)
 
     days = Date.diff(start_date, end_date, :days)

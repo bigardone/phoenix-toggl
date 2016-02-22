@@ -5,14 +5,13 @@ const initialState = {
   stop: null,
   duration: 0,
   started: false,
-  timer: null,
   timeEntry: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case Constants.TIMER_START:
-      return { ...state, started: true, timer: action.timer, timeEntry: action.timeEntry };
+      return { ...state, started: true, timeEntry: action.timeEntry };
 
     case Constants.TIMER_STOP:
       return { ...initialState };
@@ -21,6 +20,10 @@ export default function reducer(state = initialState, action = {}) {
       const { timeEntry } = action;
 
       return { ...state, timeEntry: timeEntry };
+
+    case Constants.USER_SIGNED_OUT:
+      return initialState;
+
     default:
       return state;
   }

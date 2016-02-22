@@ -7,12 +7,15 @@ defmodule PhoenixToggl.RepoterTest do
 
   setup do
     user = create(:user)
+    number_of_weeks = 2
 
     now = Date.now
-    start_date = Date.beginning_of_week(now, :mon)
-  end_date = Date.end_of_week(now, :mon)
+    start_date = now
+      |> Date.subtract(Time.to_timestamp(number_of_weeks - 1, :weeks))
+      |> Date.beginning_of_week(:mon)
+    end_date = Date.end_of_week(now, :mon)
 
-    for day_number <- 0..6 do
+    for day_number <- 0..((number_of_weeks * 7) - 1) do
       started_at =  start_date
         |> Date.add(Time.to_timestamp(day_number, :days))
 
@@ -28,7 +31,7 @@ defmodule PhoenixToggl.RepoterTest do
       |> TimeEntryActions.stop(stopped_at)
     end
 
-    {:ok, user: user, start_date: start_date, end_date: end_date}
+    {:ok, user: user, start_date: start_date, end_date: end_date, number_of_weeks: number_of_weeks}
   end
 
   test "invalid params" do
@@ -36,18 +39,18 @@ defmodule PhoenixToggl.RepoterTest do
     assert Reporter.generate() == {:error, :invalid_params}
   end
 
-  test "valid params", %{user: user, start_date: start_date, end_date: end_date} = params do
+  test "valid params", %{user: user, start_date: start_date, end_date: end_date, number_of_weeks: number_of_weeks} = params do
     data = Reporter.generate(params)
 
     assert data.user_id == user.id
     assert data.start_date == start_date |> DateFormat.format!("%Y-%m-%d", :strftime)
     assert data.end_date == end_date |> DateFormat.format!("%Y-%m-%d", :strftime)
-    assert length(data.days) == 7
+    assert length(data.days) == 7 * number_of_weeks
 
     for day <- data.days  do
       assert day.duration == 4 * 3600
     end
 
-    assert data.total_duration == 7 * 4 * 3600
+    assert data.total_duration == 7 * 4 * 3600 * number_of_weeks
   end
 end

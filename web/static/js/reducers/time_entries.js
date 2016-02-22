@@ -21,6 +21,10 @@ export default function reducer(state = initialState, action = {}) {
       newItems.splice(index, 1);
 
       return { ...state, items: newItems };
+
+    case Constants.USER_SIGNED_OUT:
+      return initialState;
+
     default:
       return state;
   }

@@ -2,7 +2,10 @@ import React, {PropTypes}   from 'react';
 import { connect }          from 'react-redux';
 import { Link }             from 'react-router';
 
-import { setDocumentTitle, renderErrorsFor } from '../../utils';
+import {
+  setDocumentTitle,
+  renderErrorsFor,
+  creditsText }             from '../../utils';
 import Actions              from '../../actions/registrations';
 
 class RegistrationsNewView extends React.Component {
@@ -33,6 +36,7 @@ class RegistrationsNewView extends React.Component {
           <div className="inner">
             <header>
               <div className="logo" />
+              {creditsText()}
             </header>
             <form id="sign_up_form" onSubmit={::this._handleSubmit}>
               <div className="field">

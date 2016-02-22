@@ -3,8 +3,9 @@ import React                        from 'react';
 import MainLayout                   from '../layouts/main';
 import AuthenticatedContainer       from '../containers/authenticated';
 import HomeIndexView                from '../views/home';
-import RegistrationsNewView             from '../views/registrations/new';
-import SessionsNewView                 from '../views/sessions/new';
+import RegistrationsNewView         from '../views/registrations/new';
+import SessionsNewView              from '../views/sessions/new';
+import ReportsIndexView              from '../views/reports/index';
 
 export default (
   <Route component={MainLayout}>
@@ -13,6 +14,7 @@ export default (
 
     <Route path="/" component={AuthenticatedContainer}>
       <IndexRoute component={HomeIndexView} />
+      <Route path="/reports" component={ReportsIndexView} />
     </Route>
   </Route>
 );

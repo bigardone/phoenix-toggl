@@ -23,6 +23,13 @@ class Timer extends React.Component {
     if (timeEntry != null && !started) this._startTimer(timeEntry);
   }
 
+  componentWillUnmount() {
+    if (!this.timer) return false;
+
+    this.timer.stop();
+    this.timer = null;
+  }
+
   _handleButtonClick() {
     this.props.started ? this._stop() : this._start();
   }
@@ -72,14 +79,15 @@ class Timer extends React.Component {
 
   _resetTimer() {
     const { time, description } = this.refs;
-    const { dispatch, timer } = this.props;
+    const { dispatch } = this.props;
 
-    timer.stop();
+    this.timer.stop();
+    this.timer = null;
     time.value = '0 sec';
     description.value = '';
 
     setDocumentTitle('Home');
-    dispatch(Actions.stop(timer));
+    dispatch(Actions.stop());
   }
 
   _startTimer(timeEntry) {
@@ -111,7 +119,9 @@ class Timer extends React.Component {
       timer.start(initialTime);
     }
 
-    dispatch(Actions.start(timer, timeEntry));
+    this.timer = timer;
+
+    dispatch(Actions.start(timeEntry));
   }
 
   _timeValue(value) {
