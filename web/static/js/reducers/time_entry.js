@@ -20,6 +20,10 @@ export default function reducer(state = initialState, action = {}) {
       const { timeEntry } = action;
 
       return { ...state, timeEntry: timeEntry };
+
+    case Constants.USER_SIGNED_OUT:
+      return initialState;
+
     default:
       return state;
   }

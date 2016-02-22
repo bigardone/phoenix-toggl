@@ -33,6 +33,9 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.REPORTS_SHOW_RANGE_SELECTOR:
       return { ...state, filter: { ...state.filter, show: action.show } };
 
+    case Constants.USER_SIGNED_OUT:
+      return initialState;
+
     default:
       return state;
   }

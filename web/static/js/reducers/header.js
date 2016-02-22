@@ -9,6 +9,9 @@ export default function reducer(state = initialState, action = {}) {
     case Constants.HEADER_SHOW_DROPDOWN:
       return { ...state, showMenu: action.show };
 
+    case Constants.USER_SIGNED_OUT:
+      return initialState;
+
     default:
       return state;
   }
