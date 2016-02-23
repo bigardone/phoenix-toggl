@@ -21,9 +21,9 @@ class AuthenticatedContainer extends React.Component {
   }
 
   _renderFavicon() {
-    const { timeEntry } = this.props;
+    const { timer } = this.props;
 
-    const url = timeEntry.started ? faviconData.on : faviconData.off;
+    const url = timer.started ? faviconData.on : faviconData.off;
 
     return (
       <Favicon url={url} />
@@ -57,7 +57,7 @@ const mapStateToProps = (state) => ({
   currentUser: state.session.currentUser,
   socket: state.session.socket,
   channel: state.session.channel,
-  timeEntry: state.timeEntry,
+  timer: state.timer,
 });
 
 export default connect(mapStateToProps)(AuthenticatedContainer);
