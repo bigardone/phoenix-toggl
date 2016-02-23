@@ -111,7 +111,7 @@ defmodule PhoenixToggl.TimeEntry do
 
   def sorted(query) do
     from t in query,
-      order_by: [desc: t.updated_at]
+      order_by: [desc: t.stopped_at]
   end
 
   def total_duration_for_date(query, date) do

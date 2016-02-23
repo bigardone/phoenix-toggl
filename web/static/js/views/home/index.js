@@ -149,7 +149,7 @@ class HomeIndexView extends React.Component {
     const groups = {};
 
     items.forEach((item) => {
-      const key = timexDateToString(item.updated_at);
+      const key = timexDateToString(item.started_at);
 
       groups[key] = groups[key] || [];
       groups[key].push(item);
