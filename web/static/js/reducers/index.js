@@ -3,7 +3,7 @@ import { routeReducer }     from 'react-router-redux';
 import session              from './session';
 import registration         from './registration';
 import header               from './header';
-import timeEntry            from './time_entry';
+import timer                from './timer';
 import timeEntries          from './time_entries';
 import reports              from './reports';
 
@@ -12,7 +12,7 @@ export default combineReducers({
   session: session,
   registration: registration,
   header: header,
-  timeEntry: timeEntry,
+  timer: timer,
   timeEntries: timeEntries,
   reports: reports,
 });
