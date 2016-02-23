@@ -24,7 +24,7 @@ class HomeIndexView extends React.Component {
   }
 
   _renderItems() {
-    const { items, dispatch, channel, displayDropdownFor } = this.props;
+    const { items, dispatch, channel, displayDropdownFor, timer } = this.props;
 
     const groups = this._buildItemGroups(items);
 
@@ -34,6 +34,8 @@ class HomeIndexView extends React.Component {
       const showDropdown = displayDropdownFor === header;
 
       const onContinueClick = (timeEntry) => {
+        if (timer.started) this.refs.timer.stop();
+
         if (header === 'Today') {
           const restartedAt = moment().toISOString();
           const item = { ...timeEntry, restarted_at: restartedAt };
@@ -172,10 +174,16 @@ class HomeIndexView extends React.Component {
   }
 
   render() {
+    const { timer, channel, dispatch } = this.props;
+
     return (
       <div id="home_index" className="view-container">
         <div className="container">
-          <Timer />
+          <Timer
+            ref="timer"
+            channel={channel}
+            dispatch={dispatch}
+            {...timer} />
           {::this._renderItems()}
         </div>
       </div>
@@ -184,7 +192,7 @@ class HomeIndexView extends React.Component {
 }
 
 const mapStateToProps = (state) => (
-  { ...state.timeEntries, channel: state.session.channel }
+  { ...state.timeEntries, channel: state.session.channel, timer: state.timer }
 );
 
 export default connect(mapStateToProps)(HomeIndexView);
