@@ -10,7 +10,9 @@ import {
   continueTimeEntry,
   startTimer,
   displayDropdown,
-  removeTimeEntries
+  removeTimeEntries,
+  selectSection,
+  deselectSection
 }                                 from '../../actions/time_entries';
 import TimeEntryItem              from '../../components/time_entries/item';
 import { timexDateToString }      from '../../utils';
@@ -24,14 +26,16 @@ class HomeIndexView extends React.Component {
   }
 
   _renderItems() {
-    const { items, dispatch, channel, displayDropdownFor, timer } = this.props;
+    const { items, dispatch, channel, displayDropdownFor, timer, selectedItems } = this.props;
 
     const groups = this._buildItemGroups(items);
 
     return Object.keys(groups).map((date) => {
       const items = groups[date];
+      const itemsIds = items.map((item) => item.id);
       const header = this._headerText(date);
       const showDropdown = displayDropdownFor === header;
+      const selected = selectedItems[header] != undefined;
 
       const onContinueClick = (timeEntry) => {
         if (timer.started) this.refs.timer.stop();
@@ -63,11 +67,17 @@ class HomeIndexView extends React.Component {
         dispatch(displayDropdown(header));
       };
 
+      const onCheckboxChange = (e) => {
+        const checked = e.target.checked;
+
+        checked ? dispatch(selectSection(header, itemsIds)) : dispatch(deselectSection(header, itemsIds));
+      };
+
       return (
         <section key={date} className="time-entries">
           <header>
             <div className="checkbox-container">
-              <input id={date} type="checkbox"/>
+              <input checked={selected} id={date} type="checkbox" onChange={onCheckboxChange}/>
               <label htmlFor={date}></label>
               <i className="fa fa-caret-down" onClick={onToggleDropdownClick}/>
               {::this._renderDropdown(header, showDropdown)}
@@ -109,7 +119,7 @@ class HomeIndexView extends React.Component {
       if (confirm('Are you sure you want to delete this entry?')) {
         channel.push('time_entry:delete', { id: selectedItems[section] })
         .receive('ok', (data) => {
-          dispatch(removeTimeEntries(data.ids));
+          dispatch(removeTimeEntries(section, data.ids));
         });
 
       }
@@ -129,10 +139,11 @@ class HomeIndexView extends React.Component {
   }
 
   _itemNodes(section, items, continueCallback) {
-    const { displayDropdownFor, dispatch, channel } = this.props;
+    const { displayDropdownFor, dispatch, channel, selectedItems } = this.props;
 
     return items.map((item) => {
       const displayDropdown = item.id === displayDropdownFor;
+      const selected = selectedItems[section] && selectedItems[section].indexOf(item.id) != -1;
 
       return (
         <TimeEntryItem
@@ -142,6 +153,7 @@ class HomeIndexView extends React.Component {
           dispatch={dispatch}
           channel={channel}
           section={section}
+          selected={selected}
           {...item} />
       );
     });

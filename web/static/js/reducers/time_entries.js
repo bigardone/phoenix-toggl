@@ -26,12 +26,18 @@ export default function reducer(state = initialState, action = {}) {
 
       newItems.splice(index, 1);
 
-      return { ...state, items: newItems, displayDropdownFor: 0 };
+      newSelectedItems = { ...state.selectedItems };
+      delete newSelectedItems[action.section];
+
+      return { ...state, items: newItems, displayDropdownFor: 0, selectedItems: newSelectedItems };
 
     case Constants.TIME_ENTRIES_REMOVE_ITEMS:
       newItems = [...state.items].filter((item) => action.ids.indexOf(item.id) === -1);
 
-      return { ...state, items: newItems, displayDropdownFor: 0 };
+      newSelectedItems = { ...state.selectedItems };
+      delete newSelectedItems[action.section];
+
+      return { ...state, items: newItems, displayDropdownFor: 0, selectedItems: newSelectedItems };
 
     case Constants.TIME_ENTRIES_DISPLAY_DROPDOWN_FOR:
       return { ...state, displayDropdownFor: action.id };
@@ -55,6 +61,18 @@ export default function reducer(state = initialState, action = {}) {
       index = newSelectedItems[action.section].indexOf(action.index);
 
       newSelectedItems[action.section].splice(index, 1);
+
+      return { ...state, selectedItems: newSelectedItems };
+
+    case Constants.TIME_ENTRIES_SELECT_SECTION:
+      newSelectedItems = { ...state.selectedItems };
+      newSelectedItems[action.section] = action.ids;
+
+      return { ...state, selectedItems: newSelectedItems };
+
+    case Constants.TIME_ENTRIES_DESELECT_SECTION:
+      newSelectedItems = { ...state.selectedItems };
+      delete newSelectedItems[action.section];
 
       return { ...state, selectedItems: newSelectedItems };
 

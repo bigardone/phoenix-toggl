@@ -43,7 +43,7 @@ export default class TimeEntryItem extends React.Component {
   }
 
   _renderDropdown() {
-    const { dispatch, displayDropdown, id, channel } = this.props;
+    const { dispatch, displayDropdown, id, channel, section } = this.props;
 
     if (!displayDropdown) return false;
 
@@ -53,7 +53,7 @@ export default class TimeEntryItem extends React.Component {
       if (confirm('Are you sure you want to delete this entry?')) {
         channel.push('time_entry:delete', { id: id })
         .receive('ok', (data) => {
-          dispatch(removeTimeEntry(data));
+          dispatch(removeTimeEntry(section, data));
         });
 
       }
@@ -80,7 +80,7 @@ export default class TimeEntryItem extends React.Component {
   }
 
   render() {
-    const { id, description, duration, displayDropdown } = this.props;
+    const { id, description, duration, displayDropdown, selected } = this.props;
 
     const checkboxClasses = classnames({
       'checkbox-container': true,
@@ -90,7 +90,7 @@ export default class TimeEntryItem extends React.Component {
     return (
       <li>
         <div className={checkboxClasses}>
-          <input ref="checkbox" id={id} type="checkbox" onChange={::this._handleCheckboxChange}/>
+          <input checked={selected} ref="checkbox" id={id} type="checkbox" onChange={::this._handleCheckboxChange}/>
           <label htmlFor={id}></label>
           <i className="fa fa-caret-down" onClick={::this._handleToggleDropdownClick}/>
           {::this._renderDropdown()}

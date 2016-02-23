@@ -56,19 +56,21 @@ export function displayDropdown(id) {
   };
 }
 
-export function removeTimeEntry(item) {
+export function removeTimeEntry(section, item) {
   return dispatch => {
     dispatch({
       type: Constants.TIME_ENTRIES_REMOVE_ITEM,
+      section: section,
       item: item,
     });
   };
 }
 
-export function removeTimeEntries(ids) {
+export function removeTimeEntries(section, ids) {
   return dispatch => {
     dispatch({
       type: Constants.TIME_ENTRIES_REMOVE_ITEMS,
+      section: section,
       ids: ids,
     });
   };
@@ -90,6 +92,26 @@ export function deselectTimeEntry(section, id) {
       type: Constants.TIME_ENTRIES_DESELECT_ITEM,
       section: section,
       id: id,
+    });
+  };
+}
+
+export function selectSection(section, ids) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_SELECT_SECTION,
+      section: section,
+      ids: ids,
+    });
+  };
+}
+
+export function deselectSection(section, ids) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_DESELECT_SECTION,
+      section: section,
+      ids: ids,
     });
   };
 }
