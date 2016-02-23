@@ -127,6 +127,7 @@ defmodule PhoenixToggl.UserChannel do
 
     {:reply, {:ok, time_entry}, socket}
   end
+  def handle_in("time_entry:delete", _, socket), do: {:reply, {:error, %{reason: "No time entries selected"}}, socket}
 
   def handle_in("reports:generate", %{"number_of_weeks" => number_of_weeks}, socket) do
     current_user = socket.assigns.current_user
