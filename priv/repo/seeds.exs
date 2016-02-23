@@ -10,22 +10,40 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias PhoenixToggl.{Repo, User, Workspace, TimeEntry}
-alias Timex.Date
+alias PhoenixToggl.{Repo, User, Workspace, TimeEntry, TimeEntryActions}
+alias Timex.{Date, Time}
+
+Repo.delete_all User
 
 workspace = %User{}
-|> User.changeset(%{first_name: "Ricardo", email: "ricardo@email.com", password: "12345678"})
+|> User.changeset(%{first_name: "Ricardo", email: "bigardone@gmail.com", password: "12345678"})
 |> Repo.insert!
 |> Ecto.build_assoc(:owned_workspaces)
 |> Workspace.changeset(%{name: "Default"})
 |> Repo.insert!
 
 
-%TimeEntry{}
-|> TimeEntry.start(%{
-  user_id: workspace.user_id,
-  workspace_id: workspace.id,
-  description: "Test",
-  started_at: Date.now
-})
-|> Repo.insert!
+number_of_days = 7
+
+now = Date.now
+start_date = now
+  |> Date.subtract(Time.to_timestamp(number_of_days - 1, :days))
+
+
+for day_number <- 0..(number_of_days - 1) do
+  started_at =  start_date
+    |> Date.add(Time.to_timestamp(day_number, :days))
+
+  offset = Enum.random(120..480)
+
+  stopped_at = started_at
+    |> Date.add(Time.to_timestamp(offset, :mins))
+
+  %{
+    description: "Task #{day_number + 1}",
+    user_id: workspace.user_id,
+    started_at: started_at
+  }
+  |> TimeEntryActions.start
+  |> TimeEntryActions.stop(stopped_at)
+end
