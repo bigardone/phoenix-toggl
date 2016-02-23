@@ -10,7 +10,7 @@ import {
   setDocumentTitle,
   formatDuration }                from '../../utils';
 
-class Timer extends React.Component {
+export default class Timer extends React.Component {
   componentDidMount() {
     const { timeEntry } = this.props;
 
@@ -31,7 +31,7 @@ class Timer extends React.Component {
   }
 
   _handleButtonClick() {
-    this.props.started ? this._stop() : this._start();
+    this.props.started ? this.stop() : this._start();
   }
 
   _start() {
@@ -51,7 +51,7 @@ class Timer extends React.Component {
     });
   }
 
-  _stop() {
+  stop() {
     const stoppedAt = moment().toISOString();
     const { timeEntry, channel, dispatch } = this.props;
 
@@ -205,9 +205,3 @@ class Timer extends React.Component {
     );
   }
 }
-
-const mapStateToProps = (state) => (
-  { ...state.timeEntry, channel: state.session.channel }
-);
-
-export default connect(mapStateToProps)(Timer);
