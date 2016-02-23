@@ -65,19 +65,30 @@ export function removeTimeEntry(item) {
   };
 }
 
-export function selectTimeEntry(id) {
+export function removeTimeEntries(ids) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_REMOVE_ITEMS,
+      ids: ids,
+    });
+  };
+}
+
+export function selectTimeEntry(section, id) {
   return dispatch => {
     dispatch({
       type: Constants.TIME_ENTRIES_SELECT_ITEM,
+      section: section,
       id: id,
     });
   };
 }
 
-export function deselectTimeEntry(id) {
+export function deselectTimeEntry(section, id) {
   return dispatch => {
     dispatch({
       type: Constants.TIME_ENTRIES_DESELECT_ITEM,
+      section: section,
       id: id,
     });
   };

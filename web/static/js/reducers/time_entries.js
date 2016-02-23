@@ -3,11 +3,12 @@ import Constants  from '../constants';
 const initialState = {
   items: [],
   displayDropdownFor: 0,
-  selectedITems: [],
+  selectedItems: {},
 };
 
 export default function reducer(state = initialState, action = {}) {
-  let newSelectedITems = [];
+  let newItems = [];
+  let newSelectedItems = [];
   let index = 0;
 
   switch (action.type) {
@@ -20,10 +21,15 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, items: items };
 
     case Constants.TIME_ENTRIES_REMOVE_ITEM:
-      const newItems = [...state.items];
+      newItems = [...state.items];
       index = newItems.findIndex((item) => item.id === action.item.id);
 
       newItems.splice(index, 1);
+
+      return { ...state, items: newItems, displayDropdownFor: 0 };
+
+    case Constants.TIME_ENTRIES_REMOVE_ITEMS:
+      newItems = [...state.items].filter((item) => action.ids.indexOf(item.id) === -1);
 
       return { ...state, items: newItems, displayDropdownFor: 0 };
 
@@ -31,16 +37,26 @@ export default function reducer(state = initialState, action = {}) {
       return { ...state, displayDropdownFor: action.id };
 
     case Constants.TIME_ENTRIES_SELECT_ITEM:
-      newSelectedITems = [...state.selectedITems, action.id];
-      return { ...state, selectedITems: newSelectedITems };
+      newSelectedItems = { ...state.selectedItems };
+      const section = newSelectedItems[action.section];
+
+      if (section === undefined) {
+        newSelectedItems[action.section] = [action.id];
+      } else {
+        const sectionItems = [...section, action.id];
+
+        newSelectedItems[action.section] = sectionItems;
+      }
+
+      return { ...state, selectedItems: newSelectedItems };
 
     case Constants.TIME_ENTRIES_DESELECT_ITEM:
-      newSelectedITems = [...state.selectedITems];
-      index = newSelectedITems.indexOf(action.index);
+      newSelectedItems = { ...state.selectedItems };
+      index = newSelectedItems[action.section].indexOf(action.index);
 
-      newSelectedITems.splice(index, 1);
+      newSelectedItems[action.section].splice(index, 1);
 
-      return { ...state, selectedITems: newSelectedITems };
+      return { ...state, selectedItems: newSelectedItems };
 
     case Constants.USER_SIGNED_OUT:
       return initialState;

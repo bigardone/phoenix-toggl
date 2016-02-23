@@ -30,7 +30,7 @@ export default class TimeEntryItem extends React.Component {
     this.props.continueClick(data);
   }
 
-  _handleCheckboxClick(e) {
+  _handleToggleDropdownClick(e) {
     const { id, dispatch } = this.props;
 
     dispatch(displayDropdown(id));
@@ -74,9 +74,9 @@ export default class TimeEntryItem extends React.Component {
 
   _handleCheckboxChange() {
     const { checkbox } = this.refs;
-    const { id, dispatch } = this.props;
+    const { section, id, dispatch } = this.props;
 
-    checkbox.checked ? dispatch(selectTimeEntry(id)) : dispatch(deselectTimeEntry(id));
+    checkbox.checked ? dispatch(selectTimeEntry(section, id)) : dispatch(deselectTimeEntry(section, id));
   }
 
   render() {
@@ -92,7 +92,7 @@ export default class TimeEntryItem extends React.Component {
         <div className={checkboxClasses}>
           <input ref="checkbox" id={id} type="checkbox" onChange={::this._handleCheckboxChange}/>
           <label htmlFor={id}></label>
-          <i className="fa fa-caret-down" onClick={::this._handleCheckboxClick}/>
+          <i className="fa fa-caret-down" onClick={::this._handleToggleDropdownClick}/>
           {::this._renderDropdown()}
         </div>
         <div className="description-container">

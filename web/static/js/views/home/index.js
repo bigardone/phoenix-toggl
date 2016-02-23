@@ -2,12 +2,15 @@ import React                      from 'react';
 import { connect }                from 'react-redux';
 import classnames                 from 'classnames';
 import moment                     from 'moment';
+import PageClick                  from 'react-page-click';
 import { setDocumentTitle }       from '../../utils';
 import Timer                      from '../../components/timer';
 import {
   fetchTimeEntries,
   continueTimeEntry,
-  startTimer
+  startTimer,
+  displayDropdown,
+  removeTimeEntries
 }                                 from '../../actions/time_entries';
 import TimeEntryItem              from '../../components/time_entries/item';
 import { timexDateToString }      from '../../utils';
@@ -21,13 +24,14 @@ class HomeIndexView extends React.Component {
   }
 
   _renderItems() {
-    const { items, dispatch, channel } = this.props;
+    const { items, dispatch, channel, displayDropdownFor } = this.props;
 
     const groups = this._buildItemGroups(items);
 
     return Object.keys(groups).map((date) => {
       const items = groups[date];
       const header = this._headerText(date);
+      const showDropdown = displayDropdownFor === header;
 
       const onContinueClick = (timeEntry) => {
         if (header === 'Today') {
@@ -53,13 +57,18 @@ class HomeIndexView extends React.Component {
         }
       };
 
+      const onToggleDropdownClick = () => {
+        dispatch(displayDropdown(header));
+      };
+
       return (
         <section key={date} className="time-entries">
           <header>
             <div className="checkbox-container">
               <input id={date} type="checkbox"/>
               <label htmlFor={date}></label>
-              <i className="fa fa-caret-down"/>
+              <i className="fa fa-caret-down" onClick={onToggleDropdownClick}/>
+              {::this._renderDropdown(header, showDropdown)}
             </div>
             <div className="description-container">
               <span className="title">{header}</span>
@@ -67,7 +76,7 @@ class HomeIndexView extends React.Component {
             </div>
           </header>
           <ul>
-            {::this._groupItemNodes(items, onContinueClick)}
+            {::this._itemNodes(header, items, onContinueClick)}
           </ul>
         </section>
       );
@@ -87,7 +96,37 @@ class HomeIndexView extends React.Component {
     }
   }
 
-  _groupItemNodes(items, continueCallback) {
+  _renderDropdown(section, showDropdown) {
+    const { dispatch, channel, selectedItems } = this.props;
+
+    if (!showDropdown) return false;
+
+    const onDeleteClick = (e) => {
+      e.preventDefault();
+
+      if (confirm('Are you sure you want to delete this entry?')) {
+        channel.push('time_entry:delete', { id: selectedItems[section] })
+        .receive('ok', (data) => {
+          dispatch(removeTimeEntries(data.ids));
+        });
+
+      }
+    };
+
+    return (
+      <PageClick onClick={::this._handlePageClick}>
+        <div className="dropdown">
+          <ul>
+            <li>
+              <a href="#" onClick={onDeleteClick}>Delete</a>
+            </li>
+          </ul>
+        </div>
+      </PageClick>
+    );
+  }
+
+  _itemNodes(section, items, continueCallback) {
     const { displayDropdownFor, dispatch, channel } = this.props;
 
     return items.map((item) => {
@@ -100,6 +139,7 @@ class HomeIndexView extends React.Component {
           displayDropdown={displayDropdown}
           dispatch={dispatch}
           channel={channel}
+          section={section}
           {...item} />
       );
     });
@@ -123,6 +163,12 @@ class HomeIndexView extends React.Component {
     const momentDuration = moment.duration(duration * 1000);
 
     return `${momentDuration.hours()} h ${momentDuration.minutes()} min`;
+  }
+
+  _handlePageClick() {
+    const { dispatch } = this.props;
+
+    dispatch(displayDropdown(0));
   }
 
   render() {
