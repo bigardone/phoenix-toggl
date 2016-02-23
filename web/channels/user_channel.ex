@@ -108,7 +108,16 @@ defmodule PhoenixToggl.UserChannel do
     {:reply, {:ok, time_entry}, assign(socket, :time_entry, nil)}
   end
 
-  def handle_in("time_entry:delete", %{"id" => id}, socket) do
+  def handle_in("time_entry:delete", %{"id" => ids}, socket) when is_list(ids) do
+    current_user = socket.assigns.current_user
+
+    current_user
+      |> assoc(:time_entries)
+      |> TimeEntryActions.delete_all(ids)
+
+    {:reply, {:ok, %{ids: ids}}, socket}
+  end
+  def handle_in("time_entry:delete", %{"id" => id}, socket) when is_number(id) do
     current_user = socket.assigns.current_user
 
     time_entry = current_user

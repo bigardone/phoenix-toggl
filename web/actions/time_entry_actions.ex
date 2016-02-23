@@ -48,6 +48,12 @@ defmodule PhoenixToggl.TimeEntryActions do
     |> Repo.delete!
   end
 
+  def delete_all(time_entries, ids) do
+    time_entries
+    |> TimeEntry.by_ids(ids)
+    |> Repo.delete_all
+  end
+
   defp perform_start(time_entry_params) do
     %TimeEntry{}
     |> TimeEntry.start(time_entry_params)

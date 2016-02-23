@@ -120,6 +120,11 @@ defmodule PhoenixToggl.TimeEntry do
       where: fragment("date(?) = date(?)", t.started_at, type(^date, Ecto.Date))
   end
 
+  def by_ids(query \\ TimeEntry, ids) do
+    from t in query,
+      where: t.id in ^ids
+  end
+
   # Private functions
   ###################
 
