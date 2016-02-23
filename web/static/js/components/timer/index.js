@@ -149,7 +149,13 @@ export default class Timer extends React.Component {
   _handleDescriptionKeyUp(e) {
     if (e.which != 13) return false;
 
-    this._updateTimeEntryDescription();
+    const { started } = this.props;
+
+    if (started) {
+      this._updateTimeEntryDescription();
+    } else {
+      this._start();
+    }
   }
 
   _renderDiscardLink() {
