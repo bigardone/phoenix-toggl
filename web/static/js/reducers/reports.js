@@ -15,7 +15,7 @@ function filterText(numberOfWeeks) {
     case 1:
       return 'This week';
     case 2:
-      return 'Last 2 weeks';
+      return 'Last two weeks';
     case 4:
       return 'This month';
   }
