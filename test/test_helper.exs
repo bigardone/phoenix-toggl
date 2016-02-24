@@ -1,5 +1,7 @@
 {:ok, _} = Application.ensure_all_started(:ex_machina)
 
+Application.ensure_all_started(:hound)
+
 ExUnit.start
 
 Mix.Task.run "ecto.create", ~w(-r PhoenixToggl.Repo --quiet)

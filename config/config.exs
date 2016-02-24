@@ -34,3 +34,6 @@ config :guardian, Guardian,
   ttl: { 3, :days },
   verify_issuer: true,
   serializer: PhoenixToggl.GuardianSerializer
+
+# Start Hound for ChromeDriver
+config :hound, driver: "chrome_driver"
