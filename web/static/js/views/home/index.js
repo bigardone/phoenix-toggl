@@ -96,7 +96,7 @@ class HomeIndexView extends React.Component {
   }
 
   _headerText(dateKey) {
-    const date = moment(new Date(dateKey));
+    const date = moment(dateKey, 'YYYY-MM-DD');
 
     switch (moment().diff(date, 'days')) {
       case 0:
