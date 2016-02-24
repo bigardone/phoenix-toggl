@@ -90,6 +90,16 @@ defmodule PhoenixToggl.UserChannel do
       end
   end
 
+  def handle_in("time_entry:update", %{"id" => id, "description" => _description} = params, socket) do
+    current_user = socket.assigns.current_user
+
+    time_entry = current_user
+    |> assoc(:time_entries)
+    |> Repo.get!(id)
+    |> TimeEntryActions.update(params)
+
+    {:reply, {:ok, time_entry}, socket}
+  end
   def handle_in("time_entry:update", %{"description" => _description} = params, socket) do
     time_entry = socket.assigns.time_entry
     |> TimeEntryActions.update(params)
