@@ -54,7 +54,8 @@ defmodule PhoenixToggl.Mixfile do
       {:timex, "~> 1.0"},
       {:timex_ecto, "~> 0.9.0"},
       {:mix_test_watch, "~> 0.2", only: :dev},
-      {:ex_machina, "~> 0.6.1", only: :test}
+      {:ex_machina, "~> 0.6.1", only: :test},
+      {:hound, "~> 0.8"}
     ]
   end
 
