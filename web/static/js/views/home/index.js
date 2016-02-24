@@ -139,11 +139,12 @@ class HomeIndexView extends React.Component {
   }
 
   _itemNodes(section, items, continueCallback) {
-    const { displayDropdownFor, dispatch, channel, selectedItems } = this.props;
+    const { displayDropdownFor, dispatch, channel, selectedItems, editItem } = this.props;
 
     return items.map((item) => {
       const displayDropdown = item.id === displayDropdownFor;
       const selected = selectedItems[section] && selectedItems[section].indexOf(item.id) != -1;
+      const inEditMode = item.id === editItem;
 
       return (
         <TimeEntryItem
@@ -154,6 +155,7 @@ class HomeIndexView extends React.Component {
           channel={channel}
           section={section}
           selected={selected}
+          inEditMode={inEditMode}
           {...item} />
       );
     });

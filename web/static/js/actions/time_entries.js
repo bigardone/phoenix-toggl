@@ -115,3 +115,21 @@ export function deselectSection(section, ids) {
     });
   };
 }
+
+export function editItem(id) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_EDIT_ITEM,
+      id: id,
+    });
+  };
+}
+
+export function replaceTimeEntry(item) {
+  return dispatch => {
+    dispatch({
+      type: Constants.TIME_ENTRIES_REPLACE_ITEM,
+      item: item,
+    });
+  };
+}
