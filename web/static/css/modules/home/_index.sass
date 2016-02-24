@@ -76,7 +76,6 @@
         +transition
         height: 52px
         border-bottom: 1px solid shade($light-gray, 10)
-        cursor: pointer
         &:hover
           background: shade($light-gray, 5)
 
@@ -168,6 +167,13 @@
 
     .description-container
       +flex(1 1 auto)
+      cursor: pointer
+
+
+      [type=text]
+        margin-bottom: 0
+        display: inline-block
+        width: 25em
 
     .continue-container
       a

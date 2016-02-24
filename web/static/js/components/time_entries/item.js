@@ -7,7 +7,9 @@ import {
   displayDropdown,
   removeTimeEntry,
   selectTimeEntry,
-  deselectTimeEntry }      from '../../actions/time_entries';
+  deselectTimeEntry,
+  editItem,
+  replaceTimeEntry}         from '../../actions/time_entries';
 
 export default class TimeEntryItem extends React.Component {
   _renderDuration(duration) {
@@ -79,8 +81,46 @@ export default class TimeEntryItem extends React.Component {
     checkbox.checked ? dispatch(selectTimeEntry(section, id)) : dispatch(deselectTimeEntry(section, id));
   }
 
+  _renderDescription() {
+    const { inEditMode, description } = this.props;
+    const descriptionText = description != '' && description != null ? description : '(no description)';
+
+    if (inEditMode) {
+      return (
+        <PageClick onClick={::this._removeEditMode}>
+          <input type="text" ref="description" defaultValue={descriptionText} onKeyUp={::this._handleDescriptionKeyUp}/>
+        </PageClick>
+      );
+    } else {
+      return descriptionText;
+    }
+  }
+
+  _handleEditClick() {
+    const { id, dispatch } = this.props;
+
+    dispatch(editItem(id));
+  }
+
+  _removeEditMode() {
+    const { dispatch } = this.props;
+
+    dispatch(editItem(null));
+  }
+
+  _handleDescriptionKeyUp(e) {
+    if (e.which != 13) return false;
+
+    const { id, dispatch, channel } = this.props;
+
+    channel.push('time_entry:update', { id: id, description: e.target.value.trim() })
+    .receive('ok', (data) => {
+      dispatch(replaceTimeEntry(data));
+    });
+  }
+
   render() {
-    const { id, description, duration, displayDropdown, selected } = this.props;
+    const { id, duration, displayDropdown, selected } = this.props;
 
     const checkboxClasses = classnames({
       'checkbox-container': true,
@@ -95,8 +135,8 @@ export default class TimeEntryItem extends React.Component {
           <i className="fa fa-caret-down" onClick={::this._handleToggleDropdownClick}/>
           {::this._renderDropdown()}
         </div>
-        <div className="description-container">
-          {description != '' && description != null ? description : '(no description)'}
+        <div className="description-container" onClick={::this._handleEditClick}>
+          {::this._renderDescription()}
         </div>
         <div className="continue-container">
           <a href="#" onClick={::this._handleContinueClick}><i className="fa fa-play"/></a>

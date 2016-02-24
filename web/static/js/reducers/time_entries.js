@@ -2,8 +2,9 @@ import Constants  from '../constants';
 
 const initialState = {
   items: [],
-  displayDropdownFor: 0,
+  displayDropdownFor: null,
   selectedItems: {},
+  editItem: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -29,7 +30,7 @@ export default function reducer(state = initialState, action = {}) {
       newSelectedItems = { ...state.selectedItems };
       delete newSelectedItems[action.section];
 
-      return { ...state, items: newItems, displayDropdownFor: 0, selectedItems: newSelectedItems };
+      return { ...state, items: newItems, displayDropdownFor: null, selectedItems: newSelectedItems };
 
     case Constants.TIME_ENTRIES_REMOVE_ITEMS:
       newItems = [...state.items].filter((item) => action.ids.indexOf(item.id) === -1);
@@ -37,7 +38,7 @@ export default function reducer(state = initialState, action = {}) {
       newSelectedItems = { ...state.selectedItems };
       delete newSelectedItems[action.section];
 
-      return { ...state, items: newItems, displayDropdownFor: 0, selectedItems: newSelectedItems };
+      return { ...state, items: newItems, displayDropdownFor: null, selectedItems: newSelectedItems };
 
     case Constants.TIME_ENTRIES_DISPLAY_DROPDOWN_FOR:
       return { ...state, displayDropdownFor: action.id };
@@ -76,6 +77,15 @@ export default function reducer(state = initialState, action = {}) {
 
       return { ...state, selectedItems: newSelectedItems };
 
+    case Constants.TIME_ENTRIES_EDIT_ITEM:
+      return { ...state, editItem: action.id };
+
+    case Constants.TIME_ENTRIES_REPLACE_ITEM:
+      newItems = [...state.items];
+      index = newItems.findIndex((item) => item.id === action.item.id);
+      newItems.splice(index, 1, action.item);
+
+      return { ...state, items: newItems, editItem: action.id };
     case Constants.USER_SIGNED_OUT:
       return initialState;
 
