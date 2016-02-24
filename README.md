@@ -1,8 +1,7 @@
 # Phoenix Toggl
-[![Build Status](https://travis-ci.org/bigardone/phoenix-trello.svg?branch=master)](https://travis-ci.org/bigardone/phoenix-trello)
-
-
 [Toggl](http://toggl.com) tribute done with [Elixir](https://github.com/elixir-lang/elixir), [Phoenix Framework](https://github.com/phoenixframework/phoenix), [React](https://github.com/facebook/react) and [Redux](https://github.com/rackt/redux).
+
+![`timer`](http://codeloveandboards.com/images/blog/toggl_tribute/timer-e9b1582f.jpg)
 
 ## Live demo
 https://phoenix-toggl.herokuapp.com
