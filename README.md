@@ -1,5 +1,5 @@
 # Phoenix Toggl
-[Toggl](http://toggl.com) tribute done with [Elixir](https://github.com/elixir-lang/elixir), [Phoenix Framework](https://github.com/phoenixframework/phoenix), [React](https://github.com/facebook/react) and [Redux](https://github.com/rackt/redux).
+[Toggl](https://toggl.com/) tribute done with [Elixir](https://github.com/elixir-lang/elixir), [Phoenix Framework](https://github.com/phoenixframework/phoenix), [React](https://github.com/facebook/react) and [Redux](https://github.com/reactjs/redux).
 
 ![`timer`](http://codeloveandboards.com/images/blog/toggl_tribute/timer-e9b1582f.jpg)
 
