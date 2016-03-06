@@ -1,7 +1,5 @@
 import React            from 'react';
 import { connect }      from 'react-redux';
-import Actions          from '../actions/sessions';
-import { routeActions } from 'react-router-redux';
 import Favicon          from 'react-favicon';
 
 import Header           from '../layouts/header';
@@ -10,16 +8,6 @@ import {
   creditsText }         from '../utils';
 
 class AuthenticatedContainer extends React.Component {
-  componentDidMount() {
-    const { dispatch, currentUser } = this.props;
-
-    if (!currentUser && localStorage.getItem('phoenixAuthToken')) {
-      dispatch(Actions.currentUser());
-    } else if (!localStorage.getItem('phoenixAuthToken')) {
-      dispatch(routeActions.push('/sign_in'));
-    }
-  }
-
   _renderFavicon() {
     const { timer } = this.props;
 
