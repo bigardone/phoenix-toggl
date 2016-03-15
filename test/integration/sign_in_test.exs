@@ -5,8 +5,8 @@ defmodule PhoenixToggl.SignInTest do
   test "GET /" do
     navigate_to "/"
 
-    assert page_title =~ "Sign in"
     assert element_displayed?({:id, "sign_in_form"})
+    assert page_title =~ "Sign in"
   end
 
   @tag :integration
