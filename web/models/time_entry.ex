@@ -29,7 +29,7 @@ defmodule PhoenixToggl.TimeEntry do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
     |> foreign_key_constraint(:workspace_id)
@@ -39,7 +39,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Creates a default changeset and sets the first time_range
   """
-  def start_changeset(model, params \\ :empty) do
+  def start_changeset(model, params \\ %{}) do
     model
     |> changeset(params)
     |> put_change(:duration, 0)
@@ -49,7 +49,7 @@ defmodule PhoenixToggl.TimeEntry do
   Creates a default changeset and calculates the duration depending on
   if the TimeEntry has been restarted or not.
   """
-  def stop_changeset(model, params \\ :empty) do
+  def stop_changeset(model, params \\ %{}) do
     duration = case model.restarted_at do
       nil ->
         Timex.diff(params.stopped_at, model.started_at, :seconds)
@@ -66,7 +66,7 @@ defmodule PhoenixToggl.TimeEntry do
   Creates a default changeset and sets the stop key value
   on the last time_range
   """
-  def restart_changeset(model, params \\ :empty) do
+  def restart_changeset(model, params \\ %{}) do
     model
     |> changeset(params)
     |> cast(params, @restart_required_fields, @optional_fields)
