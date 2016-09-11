@@ -2,7 +2,6 @@ defmodule PhoenixToggl.TimerMonitorTest do
   use ExUnit.Case, async: true
 
   alias PhoenixToggl.TimerMonitor
-  alias Timex.Date
 
   setup do
     user_id = :crypto.strong_rand_bytes(32) |> Base.encode64()
@@ -17,19 +16,19 @@ defmodule PhoenixToggl.TimerMonitorTest do
 
   test "starting a new timer", %{user_id: user_id} do
     time_entry_id = 1
-    started_at = Date.now
+    started_at = Timex.now
     assert TimerMonitor.start(user_id, time_entry_id, started_at) == %{time_entry_id: time_entry_id, started_at: started_at}
   end
 
   test "starting a new timer more times", %{user_id: user_id} do
     time_entry_id = 1
-    started_at = Date.now
+    started_at = Timex.now
     TimerMonitor.start(user_id, time_entry_id, started_at)
     assert TimerMonitor.start(user_id, time_entry_id, started_at) == :timer_already_started
   end
 
   test "stopping a timer", %{user_id: user_id} do
     assert TimerMonitor.stop(user_id) == :ok
-    assert TimerMonitor.start(user_id, 1, Date.now) == {:error, :invalid_timer}
+    assert TimerMonitor.start(user_id, 1, Timex.now) == {:error, :invalid_timer}
   end
 end

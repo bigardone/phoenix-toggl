@@ -1,10 +1,8 @@
 defmodule PhoenixToggl.TimeEntry do
   use PhoenixToggl.Web, :model
-  use Ecto.Model.Callbacks
 
   alias PhoenixToggl.{Workspace, User}
   alias Timex.Ecto.DateTime
-  alias Timex.Date
 
   @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :restarted_at, :duration, :updated_at]}
 
@@ -54,9 +52,9 @@ defmodule PhoenixToggl.TimeEntry do
   def stop_changeset(model, params \\ :empty) do
     duration = case model.restarted_at do
       nil ->
-        Date.diff(model.started_at, params.stopped_at, :secs)
+        Timex.diff(params.stopped_at, model.started_at, :seconds)
       restarted_at ->
-        model.duration + Date.diff(restarted_at, params.stopped_at, :secs)
+        model.duration + Timex.diff(restarted_at, params.stopped_at, :seconds)
     end
 
     model
@@ -86,7 +84,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Returns a stop_changeset
   """
-  def stop(time_entry, date_time \\ Date.now) do
+  def stop(time_entry, date_time \\ Timex.now) do
     time_entry
     |> stop_changeset(%{stopped_at: date_time})
   end
@@ -94,7 +92,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Returns a restart_changeset
   """
-  def restart(time_entry, date_time \\ Date.now) do
+  def restart(time_entry, date_time \\ Timex.now) do
     time_entry
     |> restart_changeset(%{restarted_at: date_time})
   end

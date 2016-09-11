@@ -1,6 +1,5 @@
 defmodule PhoenixToggl.Workspace do
   use PhoenixToggl.Web, :model
-  use Ecto.Model.Callbacks
 
   alias __MODULE__
   alias  PhoenixToggl.{User, WorkspaceUser, Repo}
@@ -32,15 +31,8 @@ defmodule PhoenixToggl.Workspace do
     |> foreign_key_constraint(:user_id)
   end
 
-  after_insert Workspace, :insert_workspace_user
-
-  def insert_workspace_user(changeset) do
-    workspace_id = changeset.model.id
-    user_id = changeset.model.user_id
-    workspace_user_changeset = WorkspaceUser.changeset(%WorkspaceUser{}, %{workspace_id: workspace_id, user_id: user_id})
-
-    Repo.insert!(workspace_user_changeset)
-
-    changeset
+  def insert_workspace_user(%Workspace{id: id, user_id: user_id}) do
+     WorkspaceUser.changeset(%WorkspaceUser{}, %{workspace_id: id, user_id: user_id})
+     |> Repo.insert!
   end
 end

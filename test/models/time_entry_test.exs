@@ -2,15 +2,14 @@ defmodule PhoenixToggl.TimeEntryTest do
   use PhoenixToggl.ModelCase, async: true
 
   alias PhoenixToggl.TimeEntry
-  alias Timex.Date
 
   setup do
-    user = create(:user)
+    user = insert(:user)
 
     valid_attributes = %{
       name: "Default",
       user_id: user.id,
-      started_at: Date.now
+      started_at: Timex.now
     }
 
     time_entry = %TimeEntry{}
@@ -31,8 +30,8 @@ defmodule PhoenixToggl.TimeEntryTest do
   end
 
   test "stop", %{time_entry: time_entry} do
-    stopped_at = Date.now
-      |> Date.shift(mins: 2)
+    stopped_at = Timex.now
+      |> Timex.add(Timex.Duration.from_minutes(2))
 
     time_entry = time_entry
       |> TimeEntry.stop(stopped_at)
@@ -40,7 +39,7 @@ defmodule PhoenixToggl.TimeEntryTest do
 
     refute time_entry.stopped_at == nil
     assert time_entry.duration > 0
-    assert time_entry.duration == Date.diff(time_entry.started_at, stopped_at, :secs)
+    assert time_entry.duration == Timex.diff(stopped_at, time_entry.started_at, :seconds)
   end
 
   test "restart", %{time_entry: time_entry} do
@@ -58,6 +57,6 @@ defmodule PhoenixToggl.TimeEntryTest do
     changeset = TimeEntry.restart_changeset(time_entry, %{})
 
     refute changeset.valid?
-    assert {:restarted_at, "can't be blank"} in changeset.errors
+    assert [restarted_at: { "can't be blank", []}] == changeset.errors
   end
 end
