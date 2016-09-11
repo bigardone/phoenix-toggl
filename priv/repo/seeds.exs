@@ -14,8 +14,6 @@ alias PhoenixToggl.{Repo, User, Workspace, TimeEntryActions}
 
 Repo.delete_all User
 
-alias Ecto.Multi
-
 workspace = %User{}
 |> User.changeset(%{first_name: "Ricardo", email: "bigardone@gmail.com", password: "12345678"})
 |> Repo.insert!
