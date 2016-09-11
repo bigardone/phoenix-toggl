@@ -23,7 +23,6 @@ defmodule PhoenixToggl.WorkspaceTest do
     changeset = Workspace.changeset(%Workspace{}, %{name: "Deafult", user_id: user.id})
 
     {:ok, workspace} = Repo.insert changeset
-    Workspace.insert_workspace_user(workspace)
     workspace = Repo.preload workspace, :users
 
     assert length(workspace.users) == 1

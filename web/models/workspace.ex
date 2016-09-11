@@ -1,8 +1,7 @@
 defmodule PhoenixToggl.Workspace do
   use PhoenixToggl.Web, :model
 
-  alias __MODULE__
-  alias  PhoenixToggl.{User, WorkspaceUser, Repo}
+  alias  PhoenixToggl.{User, WorkspaceUser}
 
   @derive {Poison.Encoder, only: [:id, :name]}
 
@@ -29,10 +28,11 @@ defmodule PhoenixToggl.Workspace do
     model
     |> cast(params, @required_fields, @optional_fields)
     |> foreign_key_constraint(:user_id)
+    |> insert_workspace_user
   end
 
-  def insert_workspace_user(%Workspace{id: id, user_id: user_id}) do
-     WorkspaceUser.changeset(%WorkspaceUser{}, %{workspace_id: id, user_id: user_id})
-     |> Repo.insert!
+  defp insert_workspace_user(changeset) do
+    workspace_user = %WorkspaceUser{user_id: get_field(changeset, :user_id)}
+    put_assoc(changeset, :workspace_users, [workspace_user])
   end
 end
