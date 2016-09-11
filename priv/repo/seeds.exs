@@ -16,11 +16,6 @@ Repo.delete_all User
 
 alias Ecto.Multi
 
-Multi.new
-|> Multi.insert(:user, User.changeset(%User{}, %{first_name: "Mario", email: "foo@bar.com", password: "123456"}))
-
-
-
 workspace = %User{}
 |> User.changeset(%{first_name: "Ricardo", email: "bigardone@gmail.com", password: "12345678"})
 |> Repo.insert!
