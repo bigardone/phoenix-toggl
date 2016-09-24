@@ -4,7 +4,6 @@ defmodule PhoenixToggl.Reports.Reporter do
   """
   alias PhoenixToggl.{Repo, TimeEntry}
   alias PhoenixToggl.Reports.{Data, Day}
-  alias Timex.{Date, Time, DateFormat}
 
   @format_string "%Y-%m-%d"
 
@@ -15,13 +14,13 @@ defmodule PhoenixToggl.Reports.Reporter do
   def generate(_), do: {:error, :invalid_params}
 
   defp generate_data(%{user: user, number_of_weeks: number_of_weeks}) do
-    now = Date.now
+    now = Timex.now
     start_date = now
-      |> Date.subtract(Time.to_timestamp(number_of_weeks - 1, :weeks))
-      |> Date.beginning_of_week(:mon)
-    end_date = Date.end_of_week(now, :mon)
+      |> Timex.subtract(Timex.Duration.from_weeks(number_of_weeks - 1))
+      |> Timex.beginning_of_week(:mon)
+    end_date = Timex.end_of_week(now, :mon)
 
-    days = Date.diff(start_date, end_date, :days)
+    days = Timex.diff(end_date, start_date, :days)
     days_data = process_days(user, days, start_date)
     total_duration = calculate_total_duration(days_data)
 
@@ -43,7 +42,7 @@ defmodule PhoenixToggl.Reports.Reporter do
 
   defp calculate_day(user, start_date, day_number) do
     date = start_date
-      |> Date.add(Time.to_timestamp(day_number, :days))
+      |> Timex.add(Timex.Duration.from_days(day_number))
       |> format_date
 
     total_duration = user
@@ -64,5 +63,5 @@ defmodule PhoenixToggl.Reports.Reporter do
 
   defp calculate_total_duration(days_data), do: Enum.reduce(days_data, 0, fn(x, acc) -> x.duration + acc end)
 
-  defp format_date(date), do: DateFormat.format!(date, @format_string, :strftime)
+  defp format_date(date), do: Timex.format!(date, @format_string, :strftime)
 end

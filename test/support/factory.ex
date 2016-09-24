@@ -3,7 +3,7 @@ defmodule PhoenixToggl.Factory do
 
   alias PhoenixToggl.{User, Workspace}
 
-  def factory(:user) do
+  def user_factory do
     %User{
       first_name: sequence(:first_name, &"First #{&1}"),
       last_name: sequence(:last_name, &"Last #{&1}"),
@@ -12,14 +12,14 @@ defmodule PhoenixToggl.Factory do
     }
   end
 
-  def factory(:workspace) do
+  def workspace_factory do
     %Workspace{
       name: sequence(:name, &"Workspace #{&1}")
     }
   end
 
   def with_workspace(user) do
-    create(:workspace, user_id: user.id)
+    insert(:workspace, user_id: user.id)
     user
   end
 end

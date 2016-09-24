@@ -1,10 +1,8 @@
 defmodule PhoenixToggl.TimeEntry do
   use PhoenixToggl.Web, :model
-  use Ecto.Model.Callbacks
 
   alias PhoenixToggl.{Workspace, User}
   alias Timex.Ecto.DateTime
-  alias Timex.Date
 
   @derive {Poison.Encoder, only: [:id, :description, :started_at, :stopped_at, :restarted_at, :duration, :updated_at]}
 
@@ -31,7 +29,7 @@ defmodule PhoenixToggl.TimeEntry do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
     |> foreign_key_constraint(:workspace_id)
@@ -41,7 +39,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Creates a default changeset and sets the first time_range
   """
-  def start_changeset(model, params \\ :empty) do
+  def start_changeset(model, params \\ %{}) do
     model
     |> changeset(params)
     |> put_change(:duration, 0)
@@ -51,12 +49,12 @@ defmodule PhoenixToggl.TimeEntry do
   Creates a default changeset and calculates the duration depending on
   if the TimeEntry has been restarted or not.
   """
-  def stop_changeset(model, params \\ :empty) do
+  def stop_changeset(model, params \\ %{}) do
     duration = case model.restarted_at do
       nil ->
-        Date.diff(model.started_at, params.stopped_at, :secs)
+        Timex.diff(params.stopped_at, model.started_at, :seconds)
       restarted_at ->
-        model.duration + Date.diff(restarted_at, params.stopped_at, :secs)
+        model.duration + Timex.diff(restarted_at, params.stopped_at, :seconds)
     end
 
     model
@@ -68,7 +66,7 @@ defmodule PhoenixToggl.TimeEntry do
   Creates a default changeset and sets the stop key value
   on the last time_range
   """
-  def restart_changeset(model, params \\ :empty) do
+  def restart_changeset(model, params \\ %{}) do
     model
     |> changeset(params)
     |> cast(params, @restart_required_fields, @optional_fields)
@@ -86,7 +84,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Returns a stop_changeset
   """
-  def stop(time_entry, date_time \\ Date.now) do
+  def stop(time_entry, date_time \\ Timex.now) do
     time_entry
     |> stop_changeset(%{stopped_at: date_time})
   end
@@ -94,7 +92,7 @@ defmodule PhoenixToggl.TimeEntry do
   @doc """
   Returns a restart_changeset
   """
-  def restart(time_entry, date_time \\ Date.now) do
+  def restart(time_entry, date_time \\ Timex.now) do
     time_entry
     |> restart_changeset(%{restarted_at: date_time})
   end

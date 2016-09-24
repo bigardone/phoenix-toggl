@@ -4,7 +4,7 @@ defmodule PhoenixToggl.WorkspaceTest do
   alias PhoenixToggl.Workspace
 
   setup do
-    user = create(:user)
+    user = insert(:user)
 
     {:ok, user: user}
   end

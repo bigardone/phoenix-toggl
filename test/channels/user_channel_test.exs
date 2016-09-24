@@ -1,11 +1,10 @@
 defmodule PhoenixToggl.UserChannelTest do
-  use PhoenixToggl.ChannelCase, async: true
+  use PhoenixToggl.ChannelCase
 
   alias PhoenixToggl.{UserSocket, TimerMonitor, TimeEntry}
-  alias Timex.Date
 
   setup do
-    user = create(:user)
+    user = insert(:user)
 
     {:ok, jwt, _full_claims} = user |> Guardian.encode_and_sign(:token)
     {:ok, socket} = connect(UserSocket, %{"token" => jwt})
@@ -24,13 +23,13 @@ defmodule PhoenixToggl.UserChannelTest do
   end
 
   test "after joining with active timer", %{socket: socket, user: user} do
-    workspace = create(:workspace, user_id: user.id)
+    workspace = insert(:workspace, user_id: user.id)
 
     attributes = %{
       description: "Default",
       workspace_id: workspace.id,
       user_id: user.id,
-      started_at: Date.now
+      started_at: Timex.now
     }
 
     time_entry = %TimeEntry{}
@@ -38,7 +37,7 @@ defmodule PhoenixToggl.UserChannelTest do
       |> Repo.insert!
 
     TimerMonitor.create(user.id)
-    TimerMonitor.start(user.id, time_entry.id, Date.now)
+    TimerMonitor.start(user.id, time_entry.id, Timex.now)
 
     {:ok, _, socket} = join(socket, "users:#{user.id}")
 

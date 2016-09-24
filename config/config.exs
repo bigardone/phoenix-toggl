@@ -28,6 +28,8 @@ config :phoenix, :generators,
   migration: true,
   binary_id: false
 
+config :phoenix_toggl, ecto_repos: [PhoenixToggl.Repo]
+
 # Configure guardian
 config :guardian, Guardian,
   issuer: "PhoenixToggl",

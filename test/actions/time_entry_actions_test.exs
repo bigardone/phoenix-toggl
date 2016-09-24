@@ -2,15 +2,14 @@ defmodule PhoenixToggl.TimeEntryActionsTest do
   use PhoenixToggl.ModelCase, async: true
 
   alias PhoenixToggl.{TimeEntryActions, TimeEntry}
-  alias Timex.Date
 
   setup do
-    user = create(:user)
+    user = insert(:user)
 
     valid_attributes = %{
       name: "Default",
       user_id: user.id,
-      started_at: Date.now
+      started_at: Timex.now
     }
 
     {:ok, valid_attributes: valid_attributes}

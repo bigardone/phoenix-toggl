@@ -1,11 +1,11 @@
 defmodule PhoenixToggl.WorkspaceChannelTest do
-  use PhoenixToggl.ChannelCase, async: true
+  use PhoenixToggl.ChannelCase
 
   alias PhoenixToggl.{UserSocket, WorkspaceMonitor}
 
   setup do
-    user = create(:user)
-    workspace = create(:workspace, user_id: user.id)
+    user = insert(:user)
+    workspace = insert(:workspace, user_id: user.id)
 
     {:ok, jwt, _full_claims} = user |> Guardian.encode_and_sign(:token)
 
