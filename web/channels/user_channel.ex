@@ -54,7 +54,7 @@ defmodule PhoenixToggl.UserChannel do
     "stopped_at" => stopped_at,
   }, socket) do
     current_user = socket.assigns.current_user
-    {:ok, stopped_at} = Timex.parse(stopped_at, "{ISO}")
+    {:ok, stopped_at} = Timex.parse(stopped_at, "{ISO:Extended}")
 
     time_entry = socket.assigns.time_entry
     |> TimeEntryActions.stop(stopped_at)
@@ -71,7 +71,7 @@ defmodule PhoenixToggl.UserChannel do
   }, socket) do
     current_user = socket.assigns.current_user
 
-    {:ok, restarted_at} = Timex.parse(restarted_at, "{ISO}")
+    {:ok, restarted_at} = Timex.parse(restarted_at, "{ISO:Extended}")
 
     current_user
     |> assoc(:time_entries)

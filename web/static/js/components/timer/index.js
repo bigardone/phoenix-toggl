@@ -6,7 +6,6 @@ import classnames                 from 'classnames';
 import Actions                    from '../../actions/timer';
 import { appendTimeEntry }        from '../../actions/time_entries';
 import {
-  timexDateTimeToString,
   setDocumentTitle,
   formatDuration }                from '../../utils';
 
@@ -108,12 +107,12 @@ export default class Timer extends React.Component {
     });
 
     if (timeEntry.restarted_at != null) {
-      const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.restarted_at), 'YYYY-M-D H:m:s');
+      const timeEntryStart = moment.utc(timeEntry.restarted_at, 'YYYY-M-D H:m:s');
       const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
 
       timer.start((timeEntry.duration * 1000) + initialTime);
     } else {
-      const timeEntryStart = moment.utc(timexDateTimeToString(timeEntry.started_at), 'YYYY-M-D H:m:s');
+      const timeEntryStart = moment.utc(timeEntry.started_at, 'YYYY-M-D H:m:s');
       const initialTime = moment.utc().diff(moment(timeEntryStart), 'milliseconds');
 
       timer.start(initialTime);
